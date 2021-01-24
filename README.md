@@ -1,3 +1,9 @@
+## Maze challenge!
+
+Hey why does this use WASM? I want to generate mazes client side to not cause load on our servers but that client side 
+code needs to be tough to decompile. Decompiling WASM won't get you very much, and if can make sense of that, you're 
+going to find solving this simple maze pretty easy  :)
+
 ## How to install
 
 ```sh
