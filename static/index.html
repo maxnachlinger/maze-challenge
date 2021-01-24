@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Generator</title>
+</head>
+<body>
+<h1>Maze challenge!</h1>
+<canvas style="width: 400px; height: 400px; background-color: white" id="maze"></canvas>
+
+<p>Write a function that returns an array of positions to solve a maze defined with the following JSON:</p>
+<pre id="testMazeText">
+{
+  "start": {"row": 0, "col": 0}, // stating position
+  "end": {"row": 3, "col": 3}, // ending position
+  // 4 maze rows with 4 cells each
+  "rowsAndColumns": [
+    [6, 8, 4, 4],
+    [7, 8, 3, 13],
+    [7, 8, 4, 5],
+    [3, 10, 11, 9]
+  ],
+}
+</pre>
+
+
+<div>
+    <button id="downloadMaze">Download Maze</button>
+    <button id="downloadTestMaze">Download Test Maze</button>
+</div>
+<div>
+  <h2>Solution</h2>
+  <p>Paste you solution here as an array of <code>{ row: 0, col: 0 }</code> objects.</p>
+  <textarea id="solutionText" style="width: 400px; height: 150px;"></textarea>
+</div>
+<div>
+  <button id="testSOlution">Test Solution</button>
+</div>
+<script src="index.js"></script>
+</body>
+</html>
