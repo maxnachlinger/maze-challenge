@@ -12,7 +12,7 @@ pub struct Position {
 
 /*
 Note: each column stores bits indicating open walls. So this would be true for
-a cell A without a right wall: (A * RIGHT) != 0
+a cell A without a right wall: (A & RIGHT) != 0
 The cell B to the right of A would also lack a left wall :) So (B & LEFT) != 0
 |---|----
 | A   B
