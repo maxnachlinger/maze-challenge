@@ -13,7 +13,7 @@ Given a maze defined as below, write code which returns the rows and cells visit
     [7, 8, 3, 13],
     [7, 8, 4, 5],
     [3, 10, 11, 9]
-  ],
+  ]
 }
 ```
 - `start`: the starting row/cell position in the maze
@@ -44,26 +44,35 @@ console.log((testCell & DOWN) !== 0 ? 'you can go down' : 'wall below');
 console.log((testCell & LEFT) !== 0 ? 'you can go left' : 'wall to the left');
 ```
 
+### Your solution
+
+Your code should be able to solve any maze defined as per above. Please include the start and end positions in your 
+solution as well.
+
+The path though the maze provided by your code should be in the following JSON (whitespace doesn't matter):
+```json
+[
+  {"row":0, "col":0},
+  {"row":1, "col":0},
+  {"row":2, "col":0},
+  {"row":3, "col":0},
+  {"row":3, "col":1},
+  {"row":3, "col":2},
+  {"row":3, "col":3}
+]
+```
+This is the solution to the maze defined above by the way :)
+
 ### Hints and ideas
 
-Aside from the cells telling you the directions to try, you should also make sure you don't step off the maze :)
-It will also help to keep track of cells you've already visited so you don't retry paths that didn't work out. 
+Aside from the cell values telling you the directions to try, you should also make sure you don't step off the maze :)
+It will also help to keep track of cells you've already visited so you don't retry paths that didn't work out.
 
 There are lots of maze solving algorithms out there, it's not a bad idea to have a look at a few of them.
 
 ### More notes
 
 These mazes:
- - have exactly 1 solution
- - do not contain any loops
-
-### Your solution
-
-Your code should be able to any maze defined as per above. 
-
-The path though the maze provided by your code should be in the following format:
-```javascript
-
-```
-
-This is the solution to the maze defined above by the way :)
+- have exactly 1 solution
+- do not contain any loops
+- contain cells with 4 possible walls, no diagonal moves are possible

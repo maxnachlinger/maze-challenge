@@ -1,5 +1,7 @@
+extern crate serde;
 use js_sys::*;
 use lazy_static::lazy_static;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 pub const UP: i8 = 1;
@@ -26,6 +28,20 @@ lazy_static! {
             .cloned()
             .collect()
     };
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PrefectRectangularMazeNoLoops {
+    pub start: Position,
+    pub end: Position,
+    pub rows_and_columns: Vec<Vec<i8>>,
+}
+
+#[derive(Clone, Copy, Serialize, Deserialize)]
+pub struct Position {
+    pub row: i32,
+    pub col: i32,
 }
 
 pub fn shuffle_directions() -> Vec<i8> {

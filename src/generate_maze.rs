@@ -1,14 +1,7 @@
-extern crate serde;
 use crate::util::{
-    shuffle_directions, COL_DIRECTION_OFFSETS, OPPOSITE_DIRECTIONS, ROW_DIRECTION_OFFSETS,
+    shuffle_directions, Position, PrefectRectangularMazeNoLoops, COL_DIRECTION_OFFSETS,
+    OPPOSITE_DIRECTIONS, ROW_DIRECTION_OFFSETS,
 };
-use serde::Serialize;
-
-#[derive(Clone, Serialize)]
-pub struct Position {
-    pub row: i32,
-    pub col: i32,
-}
 
 /*
 Note: each column stores bits indicating open walls. So this would be true for
@@ -18,14 +11,6 @@ The cell B to the right of A would also lack a left wall :) So (B & LEFT) != 0
 | A   B
 |---|----
 */
-
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PrefectRectangularMazeNoLoops {
-    pub start: Position,
-    pub end: Position,
-    pub rows_and_columns: Vec<Vec<i8>>,
-}
 
 // if you see this value in a cell, it's your first time there
 const CELL_UNEXPLORED: i8 = 0;
