@@ -218,6 +218,8 @@ const main = ({ generate_maze, check_solution }) => {
     state.downloadMazeEnabled = true;
     drawState(state);
   });
+
+  // TODO - handle validating solution and seeing if it is valid
 };
 
 import("../pkg/index.js").then(main).catch(console.error);
