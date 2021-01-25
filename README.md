@@ -1,54 +1,56 @@
 ## Maze challenge!
 
-Hey why does this use WASM? I want to generate mazes client side to not cause load on our servers but that client side 
-code needs to be tough to decompile. Decompiling WASM won't get you very much, and if can make sense of that, you're 
-going to find solving this simple maze pretty easy  :)
+> A fun take-home coding assignment for job applicants
 
-## How to install
+## Install things
+
+- You need nodejs installed - [here's how to install it](https://nodejs.org/)
+- You also need Rust installed - [here's how to do that](https://www.rust-lang.org/tools/install)
+- Once you have the above, clone this repo and:
+    ```sh
+    npm ci
+    ```
+
+## Run in debug mode
 
 ```sh
-npm install
-```
-
-## How to run in debug mode
-
-```sh
-# Builds the project and opens it in a new browser tab. Auto-reloads when the project changes.
 npm start
 ```
 
-## How to build in release mode
+## Build for release
+
+Builds the project and places it into the `dist` folder. 
 
 ```sh
-# Builds the project and places it into the `dist` folder.
 npm run build
 ```
 
 ## How to run unit tests
 
 ```sh
-# Runs tests in Firefox
-npm test -- --firefox
-
 # Runs tests in Chrome
 npm test -- --chrome
-
-# Runs tests in Safari
-npm test -- --safari
 ```
 
-## What does each file do?
+## Code
 
-* `Cargo.toml` contains the standard Rust metadata. You put your Rust dependencies in here. You must change this file with your details (name, description, version, authors, categories)
+- Rust code (which is compiled to WASM) is in [./src](./src)
+- Front end HTML is in [./static](./static)
+- Front end JS code is in [./js](./js)
+- I added a [some non-fancy solutions here](./solutions)
 
-* `package.json` contains the standard npm metadata. You put your JavaScript dependencies in here. You must change this file with your details (author, name, version)
+## Questions and answers
 
-* `webpack.config.js` contains the Webpack configuration. You shouldn't need to change this, unless you have very special needs.
+### Hey why does this use WASM? 
 
-* The `js` folder contains your JavaScript code (`index.js` is used to hook everything into Webpack, you don't need to change it).
+I want to generate mazes and test solutions client side to avoid load on our 
+servers. Of course by giving away the maze generation and solution checking code,
+you pretty much give away an algorithm for solving the maze :) WASM helps with 
+this since solving this silly maze will be simpler than getting anything useful 
+out of decompiled WASM :)
 
-* The `src` folder contains your Rust code.
+## TODO
 
-* The `static` folder contains any files that you want copied as-is into the final build. It contains an `index.html` file which loads the `index.js` file.
-
-* The `tests` folder contains your Rust unit tests.
+- The UI is pretty awful, it should be fixed up but preferably without a ton of bloat/libraries :)
+- The WASM maze-generation is slower than I'd like. The Rust code seems fine, but serializing the resulting maze as a JSON string and deserializing it client-side is not optimal.
+- Add tests
