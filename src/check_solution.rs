@@ -107,6 +107,7 @@ pub fn check_rectangular_maze_solution(
                     return result;
                 }
 
+                result.solution.push(position.clone());
                 result.last_position = Some(position.clone());
                 return result;
             }

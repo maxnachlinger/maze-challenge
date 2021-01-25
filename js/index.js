@@ -8,8 +8,8 @@ const wallStrokeWidth = 1;
 const getMazeBaseDrawInstructions = ({
   mazeBlockDimensions: { height, width },
   mazeDefinition: { rowsAndColumns, start, end },
-}) => {
-  const cellInstructions = rowsAndColumns.reduce(
+}) =>
+  rowsAndColumns.reduce(
     (instructions, row, rowIdx) =>
       row.reduce((cols, col, colIdx) => {
         const x = colIdx * width;
@@ -67,28 +67,11 @@ const getMazeBaseDrawInstructions = ({
     []
   );
 
-  const startInstruction = (ctx) => {
-    const x = start.col * width;
-    const y = start.row * height;
-    ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
-    ctx.fillRect(x, y, width, height);
-  };
-
-  const endInstruction = (ctx) => {
-    const x = end.col * width;
-    const y = end.row * height;
-    ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
-    ctx.fillRect(x, y, width, height);
-  };
-
-  return [startInstruction, endInstruction, ...cellInstructions];
-};
-
 const getSolutionDrawInstructions = ({
   mazeBlockDimensions: { height, width },
   solution,
 }) =>
-  solution.map(({ row, col }, idx) => (ctx) => {
+  solution.map(({ row, col }) => (ctx) => {
     const x = col * width;
     const y = row * height;
     ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
@@ -172,7 +155,6 @@ const animateSolution = ({
     const instruction = drawInstructions.shift();
 
     if (!instruction) {
-      window.requestAnimationFrame(drawStep);
       return;
     }
 
@@ -184,7 +166,7 @@ const animateSolution = ({
     window.requestAnimationFrame(drawStep);
   };
 
-  window.requestAnimationFrame(drawStep);
+  drawStep();
 };
 
 const main = ({ generate_maze, check_solution }) => {
