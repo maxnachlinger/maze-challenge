@@ -1,3 +1,1 @@
-Finish up the into doc, add a solution to the test maze
-Create Rust maze checker
 Build out the UI

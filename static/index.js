@@ -1,27 +1,3 @@
-const tryCatchAsync = async (promise) => {
-  try {
-    const result = await promise;
-    return { result };
-  } catch (error) {
-    return { error };
-  }
-};
-
-const getJson = async (url) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`(${response.status}) ${response.statusText} returned for: ${url}`);
-  }
-
-  const { result: json, error } = await tryCatchAsync(response.json());
-  if (error) {
-    error.message = `Could not parse returned JSON. ${error.message}`;
-    throw error;
-  }
-
-  return json;
-};
-
 const createMazeCanvas = ({
   document,
   mazeBlockDimensions: { height, width },
@@ -168,11 +144,7 @@ const startUp = async () => {
 
   const rootDiv = document.getElementById('root');
 
-  const { result: mazeDefinition, error } = await tryCatchAsync(getJson('/maze'));
-  if (error) {
-    rootDiv.innerText = error;
-    return;
-  }
+  const mazeDefinition = generate_maze;
 
   const canvas = createMazeCanvas({
     document,
