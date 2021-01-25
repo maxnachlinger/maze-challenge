@@ -181,9 +181,9 @@ const main = ({ generate_maze, check_solution }) => {
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
   const state = {
-    mazeDefinition: JSON.parse(generate_maze(100, 100)),
+    mazeDefinition: JSON.parse(generate_maze(50, 50)),
     solution: null,
-    mazeBlockDimensions: { width: 6, height: 6 },
+    mazeBlockDimensions: { width: 10, height: 10 },
     ui,
   };
 
