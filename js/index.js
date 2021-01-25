@@ -89,10 +89,6 @@ const getSolutionDrawInstructions = ({
   solution,
 }) =>
   solution.map(({ row, col }, idx) => (ctx) => {
-    // leave the start and end blocks
-    if (idx === 0 || idx === solution.length - 1) {
-      return;
-    }
     const x = col * width;
     const y = row * height;
     ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
@@ -112,32 +108,29 @@ const sizeMazeCanvas = ({
   mazeCanvas.height = rowsAndColumns.length * height;
 };
 
-const setupDownloadLink = ({ link, mazeDefinition }) => {
-  link.setAttribute(
-    "href",
-    "data:application/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(mazeDefinition))
-  );
-  link.setAttribute("download", "maze.json");
-};
-
-const pastedMazeTextIsValid = (mazeDefinitionText) => {
-  // TODO
-  // mazeDefinitionText is required
-  // should be valid JSON
-  // should have start, end, and rowsAndColumns properties
-  // start and end properties should be positions, with row and col numbers
-  // rowsAndColumns 2d array should have length of 100
-  // each row array in rowsAndColumns should have 100 items, all numbers
-  // return an array of errors found
-};
-
-const drawMaze = ({
-  mazeCanvas,
+const drawState = ({
+  ui: {
+    downloadMazeLink,
+    mazeDefinitionTextarea,
+    mazeCanvas,
+    solutionResultsDiv,
+  },
   mazeBlockDimensions,
   mazeDefinition,
-  solution,
+  solutionTestResult,
 }) => {
+  const mazeDefinitionString = JSON.stringify(mazeDefinition);
+
+  downloadMazeLink.style.display = "inline";
+  downloadMazeLink.setAttribute(
+    "href",
+    "data:application/json;charset=utf-8," +
+      encodeURIComponent(mazeDefinitionString)
+  );
+  downloadMazeLink.setAttribute("download", "maze.json");
+
+  mazeDefinitionTextarea.innerText = mazeDefinitionString;
+
   sizeMazeCanvas({ mazeCanvas, mazeBlockDimensions, mazeDefinition });
 
   const mazeBaseDrawInstructions = getMazeBaseDrawInstructions({
@@ -146,80 +139,88 @@ const drawMaze = ({
   });
 
   const mazeCanvasContext = mazeCanvas.getContext("2d");
+  mazeCanvasContext.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
 
   drawRectsOnMazeCanvas({
     mazeCanvasContext,
     drawInstructions: mazeBaseDrawInstructions,
   });
 
-  if (!solution) {
+  if (!solutionTestResult) {
+    solutionResultsDiv.style.setProperty("display", "none");
     return;
   }
 
-  const solutionDrawInstructions = getSolutionDrawInstructions({
+  solutionResultsDiv.style.setProperty("display", "block");
+  solutionResultsDiv.innerText = solutionTestResult.valid
+    ? "Your solution works, well done!"
+    : "Your solution had some errors: " + solutionTestResult.errorMessage;
+};
+
+const animateSolution = ({
+  mazeBlockDimensions,
+  ui: { mazeCanvas },
+  solutionTestResult: { solution },
+}) => {
+  const drawInstructions = getSolutionDrawInstructions({
     mazeBlockDimensions,
     solution,
   });
-  drawRectsOnMazeCanvas({ mazeCanvasContext, solutionDrawInstructions });
-};
 
-const drawState = (state) => {
-  document.getElementById(
-    "generateMaze"
-  ).style.display = state.generateMazeEnabled ? "inline" : "none";
-
-  const downloadMazeLink = document.getElementById("downloadMaze");
-
-  if (!state.downloadMazeEnabled) {
-    downloadMazeLink.style.display = "none";
-    downloadMazeLink.setAttribute("href", "javascript: void(0)");
-    downloadMazeLink.removeAttribute("download");
-  }
-
-  if (state.downloadMazeEnabled && state.mazeDefinition) {
-    downloadMazeLink.style.display = "inline";
-    downloadMazeLink.setAttribute(
-      "href",
-      "data:application/json;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(state.mazeDefinition))
-    );
-    downloadMazeLink.setAttribute("download", "maze.json");
-  }
-
-  const mazeCanvas = document.getElementById("mazeCanvas");
   const mazeCanvasContext = mazeCanvas.getContext("2d");
+  const drawStep = () => {
+    const instruction = drawInstructions.shift();
 
-  if (!state.mazeDefinition) {
-    mazeCanvasContext.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-  } else {
-    drawMaze({ mazeCanvas, ...state });
-  }
+    if (!instruction) {
+      window.requestAnimationFrame(drawStep);
+      return;
+    }
+
+    drawRectsOnMazeCanvas({
+      mazeCanvasContext,
+      drawInstructions: [instruction],
+    });
+
+    window.requestAnimationFrame(drawStep);
+  };
+
+  window.requestAnimationFrame(drawStep);
 };
 
 const main = ({ generate_maze, check_solution }) => {
+  const ui = [
+    "downloadMazeLink",
+    "mazeDefinitionTextarea",
+    "updateMazeButton",
+    "mazeCanvas",
+    "solutionTextarea",
+    "testSolutionButton",
+    "solutionResultsDiv",
+  ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
+
   const state = {
-    mazeDefinition: null,
+    mazeDefinition: JSON.parse(generate_maze(100, 100)),
     solution: null,
-    generateMazeEnabled: true,
-    downloadMazeEnabled: false,
     mazeBlockDimensions: { width: 6, height: 6 },
+    ui,
   };
 
   drawState(state);
 
-  const link = document.getElementById("generateMaze");
-  link.addEventListener("click", (event) => {
-    state.generateMazeEnabled = false;
-    drawState(state);
-
-    state.mazeDefinition = JSON.parse(generate_maze(100, 100));
-
-    state.generateMazeEnabled = true;
-    state.downloadMazeEnabled = true;
+  ui.updateMazeButton.addEventListener("click", () => {
+    state.mazeDefinition = JSON.parse(ui.mazeDefinitionTextarea.value);
     drawState(state);
   });
 
-  // TODO - handle validating solution and seeing if it is valid
+  ui.testSolutionButton.addEventListener("click", () => {
+    const solution = ui.solutionTextarea.value;
+    state.solutionTestResult = JSON.parse(
+      check_solution(JSON.stringify(state.mazeDefinition), solution)
+    );
+
+    drawState(state);
+    animateSolution(state);
+  });
 };
 
 import("../pkg/index.js").then(main).catch(console.error);

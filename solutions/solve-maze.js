@@ -89,8 +89,6 @@ const solveRectangularMaze = ({ start, end, rowsAndColumns, }) => {
 	const placesToExploreQueue = [{ currentPosition: start, currentPath: [start] }];
 	while (placesToExploreQueue.length > 0) {
 		const placeToExplore = placesToExploreQueue.pop();
-		// makes TS happy, have a look below though - no way a falsy value could be
-		// on the stack
 		if (!placeToExplore) {
 			continue;
 		}
@@ -121,16 +119,3 @@ const solveRectangularMaze = ({ start, end, rowsAndColumns, }) => {
 	// no way out of the maze
 	return [];
 };
-
-const mazeDefinition = {
-	"start": {"row": 0, "col": 0},
-	"end": {"row": 3, "col": 3},
-	"rowsAndColumns": [
-		[6, 8, 4, 4],
-		[7, 8, 3, 13],
-		[7, 8, 4, 5],
-		[3, 10, 11, 9]
-	]
-};
-const solution = solveRectangularMaze(mazeDefinition);
-console.log(JSON.stringify(solution));

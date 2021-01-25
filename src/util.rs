@@ -1,6 +1,7 @@
 extern crate serde;
-use js_sys::*;
 use lazy_static::lazy_static;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -46,16 +47,6 @@ pub struct Position {
 
 pub fn shuffle_directions() -> Vec<i8> {
     let mut directions = vec![UP, RIGHT, DOWN, LEFT];
-    let mut tmp: i8;
-    let mut i = directions.len() - 1;
-    let mut j: usize;
-
-    while i > 0 {
-        j = Math::floor(Math::random() * (i as f64 + 1.0)) as usize;
-        tmp = directions[j];
-        directions[j] = directions[i];
-        directions[i] = tmp;
-        i -= i;
-    }
-    return directions;
+    directions.shuffle(&mut thread_rng());
+    directions
 }

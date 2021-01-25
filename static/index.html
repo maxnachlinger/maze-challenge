@@ -7,17 +7,27 @@
 <body>
 <h1>Maze challenge checker!</h1>
 <div>
-    <a href="#" id="generateMaze">Generate a maze</a>
-    <a id="downloadMaze">Download generated maze</a>
+    <p>Current maze:</p>
+    <canvas style="background-color: white" id="mazeCanvas"></canvas>
 </div>
-<canvas style="background-color: white" id="mazeCanvas"></canvas>
+<p>
+    Paste a maze definition:
+</p>
+<div><textarea id="mazeDefinitionTextarea" style="width: 400px; height: 150px;"></textarea></div>
 <div>
-  <h2>Solution</h2>
-  <p>Paste you solution here as an array of <code>{ row: 0, col: 0 }</code> objects.</p>
-  <textarea id="solutionText" style="width: 400px; height: 150px;"></textarea>
+    <button id="updateMazeButton">Update maze</button>
 </div>
+
+<p>Or</p>
+
+<div><a id="downloadMazeLink">download current maze definition</a></div>
+
+<h2>Solution</h2>
+<p>Paste you solution here as an array of <code>{ row: 0, col: 0 }</code> objects.</p>
+<textarea id="solutionTextarea" style="width: 400px; height: 150px;"></textarea>
+<div id="solutionResultsDiv" style="display: none"></div>
 <div>
-  <button id="testSolution">Test Solution</button>
+    <button id="testSolutionButton">Test Solution</button>
 </div>
 <script src="index.js"></script>
 </body>

@@ -49,7 +49,7 @@ fn determine_move_direction(last_position: &Position, row: &i32, col: &i32) -> D
         };
     }
 
-    if row < &last_position.col {
+    if col < &last_position.col {
         return DirectionAndName {
             value: LEFT,
             name: DIRECTION_TO_NAME_MAP.get(&LEFT).unwrap().clone(),
@@ -78,7 +78,7 @@ pub fn check_rectangular_maze_solution(
     maze: PrefectRectangularMazeNoLoops,
     solution: Vec<Position>,
 ) -> CheckSolutionResult {
-    solution.iter().enumerate().fold(
+    let mut check_solution_result = solution.iter().enumerate().fold(
         CheckSolutionResult {
             last_position: None,
             error_message: None,
@@ -95,6 +95,22 @@ pub fn check_rectangular_maze_solution(
 
             let Position { row, col } = position;
 
+            // no last position means we're starting, ensure we're starting at maze.start
+            if result.last_position.is_none() {
+                // is this position on the maze?
+                if *row != maze.start.row || *col != maze.start.col {
+                    result.error_message = Some(format!(
+                        "Start your solution at the starting cell (row: {}, col: {}).",
+                        &maze.start.row, &maze.start.col,
+                    ));
+                    result.valid = false;
+                    return result;
+                }
+
+                result.last_position = Some(position.clone());
+                return result;
+            }
+
             // is this position on the maze?
             if row < &0
                 || row > &((maze.rows_and_columns.len() as i32) - 1)
@@ -106,12 +122,6 @@ pub fn check_rectangular_maze_solution(
                     &idx, &row, &col,
                 ));
                 result.valid = false;
-                return result;
-            }
-
-            // no last position means we're starting, no more validation to do
-            if result.last_position.is_none() {
-                result.last_position = Some(position.clone());
                 return result;
             }
 
@@ -166,5 +176,21 @@ pub fn check_rectangular_maze_solution(
 
             return result;
         },
-    )
+    );
+
+    if !check_solution_result.valid {
+        return check_solution_result;
+    }
+
+    // check that the last cell of the solution is maze.end
+    let Position { row, col } = solution[solution.len() - 1];
+    if row != maze.end.row || col != maze.end.col {
+        check_solution_result.error_message = Some(format!(
+            "Complete your solution at the ending cell (row: {}, col: {}).",
+            &maze.end.row, &maze.end.col,
+        ));
+        check_solution_result.valid = false;
+    }
+
+    check_solution_result
 }
