@@ -14,18 +14,17 @@
         </p>
         <h3>Maze definition format</h3>
 
-        <pre><code>{
-"start": {"row": 0, "col": 0},
-"end": {"row": 3, "col": 3},
-"rowsAndColumns": [
-[6, 8, 4, 4],
-[7, 8, 3, 13],
-[7, 8, 4, 5],
-[3, 10, 11, 9]
-]
+        <pre><code class="language-json">{
+  "start": {"row": 0, "col": 0},
+  "end": {"row": 3, "col": 3},
+  "rowsAndColumns": [
+    [6, 8, 4, 4],
+    [7, 8, 3, 13],
+    [7, 8, 4, 5],
+    [3, 10, 11, 9]
+  ]
 }
 </code></pre>
-
         <ul>
           <li>
             <code>start</code>: the starting row/cell position in the maze
@@ -35,7 +34,7 @@
             <code>rowsAndColumns</code>: a two-dimensional array of rows and
             cells. The number in the cell are bits which tell you which walls of
             that cell are open. Here are the bits for the walls:
-            <pre><code>const UP = 1;
+            <pre><code class="language-javascript">const UP = 1;
 const RIGHT = 2;
 const DOWN = 4;
 const LEFT = 8;
@@ -47,7 +46,7 @@ const LEFT = 8;
           Here is some example code testing a cell to see which exits are
           available:
         </p>
-        <pre><code>// directions used in the maze
+        <pre><code class="language-javascript">// directions used in the maze
 const UP = 1;
 const RIGHT = 2;
 const DOWN = 4;
@@ -71,14 +70,14 @@ console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left'
           The path though the maze provided by your code should be in the
           following JSON (whitespace doesn&#39;t matter):
         </p>
-        <pre><code>[
-{"row":0, "col":0},
-{"row":1, "col":0},
-{"row":2, "col":0},
-{"row":3, "col":0},
-{"row":3, "col":1},
-{"row":3, "col":2},
-{"row":3, "col":3}
+        <pre><code class="language-javascript">[
+  {"row":0, "col":0},
+  {"row":1, "col":0},
+  {"row":2, "col":0},
+  {"row":3, "col":0},
+  {"row":3, "col":1},
+  {"row":3, "col":2},
+  {"row":3, "col":3}
 ]
 </code></pre>
         <p>This is the solution to the maze defined above by the way :)</p>
@@ -124,7 +123,7 @@ console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left'
         <h2>Solution</h2>
         <p>
           Paste your solution here as a JSON array of position objects,<br />e.g.
-          <code>[{"row":0,"col":0},{"row":0,"col":1}]</code>
+          <code class="language-json">[{"row":0,"col":0},{"row":0,"col":1}]</code>
         </p>
         <textarea id="solutionTextarea"></textarea>
         <div id="solutionResultsDiv" style="display: none"></div>

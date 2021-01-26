@@ -1,4 +1,6 @@
 import "./style.css";
+import "./prism.css";
+import './prism';
 
 const up = 1;
 const right = 2;
