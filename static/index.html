@@ -14,9 +14,10 @@
         </p>
         <h3>Maze definition format</h3>
 
-        <pre><code class="language-json">{
-  "start": {"row": 0, "col": 0},
-  "end": {"row": 3, "col": 3},
+        <pre><code class="language-javascript">{
+  "start": {"row": 0, "col": 0}, // starting point in maze
+  "end": {"row": 3, "col": 3}, // goal/end point in maze
+   // 2-2 array of maze rows and columns. Read more below :)
   "rowsAndColumns": [
     [6, 8, 4, 4],
     [7, 8, 3, 13],
@@ -24,29 +25,17 @@
     [3, 10, 11, 9]
   ]
 }
+/*
+The number in the cell are bits which tell you which walls
+of that cell are open. The bits are:
+UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8
+*/
 </code></pre>
-        <ul>
-          <li>
-            <code>start</code>: the starting row/cell position in the maze
-          </li>
-          <li><code>end</code>: the end row/cell position in the maze</li>
-          <li>
-            <code>rowsAndColumns</code>: a two-dimensional array of rows and
-            cells. The number in the cell are bits which tell you which walls of
-            that cell are open. Here are the bits for the walls:
-            <pre><code class="language-javascript">const UP = 1;
-const RIGHT = 2;
-const DOWN = 4;
-const LEFT = 8;
-</code></pre>
-          </li>
-        </ul>
-
         <p>
           Here is some example code testing a cell to see which exits are
           available:
         </p>
-        <pre><code class="language-javascript">// directions used in the maze
+        <pre><code class="language-javascript">// directions used in the maze / how the bits are defined
 const UP = 1;
 const RIGHT = 2;
 const DOWN = 4;
@@ -123,7 +112,7 @@ console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left'
         <h2>Solution</h2>
         <p>
           Paste your solution here as a JSON array of position objects,<br />e.g.
-          <code class="language-json">[{"row":0,"col":0},{"row":0,"col":1}]</code>
+          <code>[{"row":0,"col":0},{"row":0,"col":1}]</code>
         </p>
         <textarea id="solutionTextarea"></textarea>
         <div id="solutionResultsDiv" style="display: none"></div>
