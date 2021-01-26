@@ -22,7 +22,6 @@ pub fn check_solution(maze_json_str: String, solution_json_str: String) -> JsVal
     JsValue::from_str(&serde_json::to_string(&check_solution_result).unwrap())
 }
 
-// This is like the `main` function, except for JavaScript.
 #[wasm_bindgen(start)]
 pub fn main_js() -> Result<(), JsValue> {
     // This provides better error messages in debug mode.

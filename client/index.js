@@ -1,3 +1,5 @@
+import "./style.css";
+
 const up = 1;
 const right = 2;
 const down = 4;

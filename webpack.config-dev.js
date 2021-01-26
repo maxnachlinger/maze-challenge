@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require('webpack');
+const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
@@ -9,11 +9,11 @@ module.exports = {
   mode: "development",
   devtool: "source-map",
   entry: {
-    index: "./js/index.js"
+    index: "./client/index.js",
   },
   output: {
     path: dist,
-    filename: "[name].js"
+    filename: "[name].js",
   },
   experiments: {
     asyncWebAssembly: true,
@@ -23,13 +23,20 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [
-        path.resolve(__dirname, "static"),
-      ],
+      patterns: [path.resolve(__dirname, "static")],
     }),
     new WasmPackPlugin({
       crateDirectory: __dirname,
     }),
     new webpack.HotModuleReplacementPlugin(),
-  ]
+  ],
+  module: {
+    rules: [
+      { test: /\.js$/, use: ["babel-loader"] },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
 };

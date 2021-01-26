@@ -7,9 +7,9 @@
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
 - You also need Rust installed - [here's how to do that](https://www.rust-lang.org/tools/install)
 - Once you have the above, clone this repo and:
-    ```sh
-    npm ci
-    ```
+  ```sh
+  npm ci
+  ```
 
 ## Run in debug mode
 
@@ -19,7 +19,7 @@ npm start
 
 ## Build for release
 
-Builds the project and places it into the `dist` folder. 
+Builds the project and places it into the `dist` folder.
 
 ```sh
 npm run build
@@ -36,17 +36,17 @@ npm test -- --chrome
 
 - Rust code (which is compiled to WASM) is in [./src](./src)
 - Front end HTML is in [./static](./static)
-- Front end JS code is in [./js](./js)
+- Front end JS code is in [./js](client)
 - I added a [some non-fancy solutions here](./solutions)
 
 ## Questions and answers
 
-### Hey why does this use WASM? 
+### Hey why does this use WASM?
 
-I want to generate mazes and test solutions client side to avoid load on our 
+I want to generate mazes and test solutions client side to avoid load on our
 servers. Of course by giving away the maze generation and solution checking code,
-you pretty much give away an algorithm for solving the maze :) WASM helps with 
-this since solving this silly maze will be simpler than getting anything useful 
+you pretty much give away an algorithm for solving the maze :) WASM helps with
+this since solving this silly maze will be simpler than getting anything useful
 out of decompiled WASM :)
 
 ## TODO
