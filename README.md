@@ -6,6 +6,7 @@
 
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
 - You also need Rust installed - [here's how to do that](https://www.rust-lang.org/tools/install)
+- Install `wasm-pack` - [here's a link to that](https://rustwasm.github.io/wasm-pack/installer/)
 - Once you have the above, clone this repo and:
   ```sh
   npm ci
