@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
     <title>Maze Generator</title>
-</head>
-<body>
-<div class="flex-grid">
-<div class="col">
-    <h2>Maze Challenge</h2>
-    <p>
-        Given a maze defined as below, write code which returns the rows and cells
-        visited to solve the maze.
-    </p>
-    <h3>Maze definition format</h3>
+  </head>
+  <body>
+    <div class="flex-grid">
+      <div class="col">
+        <h2>Maze Challenge</h2>
+        <p>
+          Given a maze defined as below, write code which returns the rows and
+          cells visited to solve the maze.
+        </p>
+        <h3>Maze definition format</h3>
 
-    <pre><code>{
+        <pre><code>{
 "start": {"row": 0, "col": 0},
 "end": {"row": 3, "col": 3},
 "rowsAndColumns": [
@@ -26,25 +26,28 @@
 }
 </code></pre>
 
-    <ul>
-        <li><code>start</code>: the starting row/cell position in the maze</li>
-        <li><code>end</code>: the end row/cell position in the maze</li>
-        <li>
-            <code>rowsAndColumns</code>: a two-dimensional array of rows and cells.
-            The number in the cell are bits which tell you which walls of that cell
-            are open. Here are the bits for the walls:
+        <ul>
+          <li>
+            <code>start</code>: the starting row/cell position in the maze
+          </li>
+          <li><code>end</code>: the end row/cell position in the maze</li>
+          <li>
+            <code>rowsAndColumns</code>: a two-dimensional array of rows and
+            cells. The number in the cell are bits which tell you which walls of
+            that cell are open. Here are the bits for the walls:
             <pre><code class="lang-javascript">const UP = 1;
 const RIGHT = 2;
 const DOWN = 4;
 const LEFT = 8;
 </code></pre>
-        </li>
-    </ul>
+          </li>
+        </ul>
 
-    <p>
-        Here is some example code testing a cell to see which exits are available:
-    </p>
-    <pre><code>// directions used in the maze
+        <p>
+          Here is some example code testing a cell to see which exits are
+          available:
+        </p>
+        <pre><code>// directions used in the maze
 const UP = 1;
 const RIGHT = 2;
 const DOWN = 4;
@@ -59,16 +62,16 @@ console.log((testCell &amp; DOWN) !== 0 ? 'you can go down' : 'wall below');
 console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left');
 </code></pre>
 
-    <h3>Your solution</h3>
-    <p>
-        Your code should be able to solve any maze defined as per above. Please
-        include the start and end positions in your solution as well.
-    </p>
-    <p>
-        The path though the maze provided by your code should be in the following
-        JSON (whitespace doesn&#39;t matter):
-    </p>
-    <pre><code>[
+        <h3>Your solution</h3>
+        <p>
+          Your code should be able to solve any maze defined as per above.
+          Please include the start and end positions in your solution as well.
+        </p>
+        <p>
+          The path though the maze provided by your code should be in the
+          following JSON (whitespace doesn&#39;t matter):
+        </p>
+        <pre><code>[
 {"row":0, "col":0},
 {"row":1, "col":0},
 {"row":2, "col":0},
@@ -78,65 +81,58 @@ console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left'
 {"row":3, "col":3}
 ]
 </code></pre>
-    <p>This is the solution to the maze defined above by the way :)</p>
+        <p>This is the solution to the maze defined above by the way :)</p>
 
-    <h3>Hints and ideas</h3>
-    <p>
-        Aside from the cell values telling you the directions to try, you should
-        also make sure you don&#39;t step off the maze :) It will also help to
-        keep track of cells you&#39;ve already visited so you don&#39;t retry
-        paths that didn&#39;t work out.
-    </p>
-    <p>
-        There are lots of maze solving algorithms out there, it&#39;s not a bad
-        idea to have a look at a few of them.
-    </p>
+        <h3>Hints and ideas</h3>
+        <p>
+          Aside from the cell values telling you the directions to try, you
+          should also make sure you don&#39;t step off the maze :) It will also
+          help to keep track of cells you&#39;ve already visited so you
+          don&#39;t retry paths that didn&#39;t work out.
+        </p>
+        <p>
+          There are lots of maze solving algorithms out there, it&#39;s not a
+          bad idea to have a look at a few of them.
+        </p>
 
-    <h3>More notes</h3>
-    <p>These mazes:</p>
-    <ul>
-        <li>have exactly 1 solution</li>
-        <li>do not contain any loops</li>
-        <li>
+        <h3>More notes</h3>
+        <p>These mazes:</p>
+        <ul>
+          <li>have exactly 1 solution</li>
+          <li>do not contain any loops</li>
+          <li>
             contain cells with 4 possible walls, no diagonal moves are possible
-        </li>
-    </ul>
-</div>
-<div class="col">
-    <h2>Maze challenge checker!</h2>
-    <div>
-        <p>Current maze:</p>
-        <canvas style="background-color: white" id="mazeCanvas"></canvas>
-    </div>
-    <p>Paste a maze definition:</p>
-    <div>
-      <textarea
-              id="mazeDefinitionTextarea"
-              style="width: 400px; height: 150px"></textarea>
-    </div>
-    <div>
-        <button id="updateMazeButton">Update maze</button>
-    </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <h2>Maze challenge checker!</h2>
+        <div>
+          <p>Current maze:</p>
+          <canvas style="background-color: white" id="mazeCanvas"></canvas>
+          <br />
+          <a id="downloadMazeLink">download current maze definition</a>
+        </div>
+        <p>You can also paste a maze definition to test:</p>
+        <div>
+          <textarea id="mazeDefinitionTextarea"></textarea>
+        </div>
+        <div>
+          <button id="updateMazeButton">Update maze</button>
+        </div>
 
-    <p>Or</p>
-
-    <div><a id="downloadMazeLink">download current maze definition</a></div>
-
-    <h2>Solution</h2>
-    <p>
-        Paste you solution here as an array of
-        <code>{ row: 0, col: 0 }</code> objects.
-    </p>
-    <textarea
-            id="solutionTextarea"
-            style="width: 400px; height: 150px"
-    ></textarea>
-    <div id="solutionResultsDiv" style="display: none"></div>
-    <div>
-        <button id="testSolutionButton">Test Solution</button>
+        <h2>Solution</h2>
+        <p>
+          Paste your solution here as a JSON array of position objects,<br />e.g.
+          <code>[{"row":0,"col":0},{"row":0,"col":1}]</code>
+        </p>
+        <textarea id="solutionTextarea"></textarea>
+        <div id="solutionResultsDiv" style="display: none"></div>
+        <div>
+          <button id="testSolutionButton">Test Solution</button>
+        </div>
+      </div>
     </div>
-</div>
-</div>
-<script src="index.js"></script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>
