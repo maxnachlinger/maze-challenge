@@ -2,6 +2,8 @@
 
 > A fun take-home coding assignment for job applicants
 
+## [Demo](https://gecgithub01.walmart.com/pages/m0n0096/maze-challenge/)
+
 ## Install things
 
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
@@ -20,7 +22,7 @@ npm start
 
 ## Build for release
 
-Builds the project and places it into the `dist` folder.
+Builds the project and places it into the `docs` folder.
 
 ```sh
 npm run build
@@ -44,7 +46,7 @@ npm test -- --chrome
 
 ### Hey why does this use WASM?
 
-I want to generate mazes and test solutions client-side to avoid load on servers. 
+I want to generate mazes and test solutions client-side to avoid load on servers.
 Of course by giving away the maze generation and solution checking code,
 you pretty much give away an algorithm for solving the maze :) WASM helps with
 this since solving this silly maze will be simpler than getting anything useful

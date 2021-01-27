@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
-const dist = path.resolve(__dirname, "dist");
+const docs = path.resolve(__dirname, "docs");
 
 module.exports = {
   mode: "development",
@@ -12,14 +12,14 @@ module.exports = {
     index: "./client/index.js",
   },
   output: {
-    path: dist,
+    path: docs,
     filename: "[name].js",
   },
   experiments: {
     asyncWebAssembly: true,
   },
   devServer: {
-    contentBase: dist,
+    contentBase: docs,
   },
   plugins: [
     new CopyPlugin({

@@ -78,8 +78,10 @@ export const getSolutionDrawInstructions = ({
     ctx.fillRect(x, y, width, height);
   });
 
-export const drawRectsOnMazeCanvas = ({ mazeCanvasContext, drawInstructions }) =>
-  drawInstructions.forEach((fn) => fn(mazeCanvasContext));
+export const drawRectsOnMazeCanvas = ({
+  mazeCanvasContext,
+  drawInstructions,
+}) => drawInstructions.forEach((fn) => fn(mazeCanvasContext));
 
 export const sizeMazeCanvas = ({
   mazeCanvas,

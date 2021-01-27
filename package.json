@@ -4,8 +4,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "build": "rimraf dist pkg && webpack -c webpack.config-prod.js",
-    "start": "rimraf dist pkg && webpack serve --open -c webpack.config-dev.js",
+    "build": "rimraf docs pkg && webpack -c webpack.config-prod.js",
+    "start": "rimraf docs pkg && webpack serve --open -c webpack.config-dev.js",
     "test": "cargo test && wasm-pack test --headless",
     "format": "cargo fmt && prettier --write ."
   },

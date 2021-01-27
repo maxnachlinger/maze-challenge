@@ -96,10 +96,18 @@ console.log((testCell &amp; LEFT) !== 0 ? 'you can go left' : 'wall to the left'
       <div class="col">
         <h2>Maze challenge checker!</h2>
         <div>
-          <p>Current maze:</p>
-          <canvas style="background-color: white" id="mazeCanvas"></canvas>
-          <br />
-          <a id="downloadMazeLink">download current maze definition</a>
+          <p>
+            <a id="testMazeLink" href="javascript:"
+              >Try a test maze and solution</a
+            >
+            &nbsp;|&nbsp;
+            <a id="downloadMazeLink">Download current maze definition</a>
+            &nbsp;|&nbsp;
+            <a id="generateMazeLink" href="javascript:">Generate a new maze</a>
+          </p>
+          <canvas style="background-color: white" id="mazeCanvas">
+            Waiting for Github...
+          </canvas>
         </div>
         <p>You can also paste a maze definition to test:</p>
         <div>

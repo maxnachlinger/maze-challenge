@@ -1,6 +1,10 @@
 body {
   font-family: sans-serif;
 }
+textarea {
+  width: 100%;
+  height: 140px;
+}
 .flex-grid {
   display: flex;
   justify-content: space-between;
@@ -8,7 +12,7 @@ body {
 .flex-grid .col {
   width: 48%;
 }
-textarea {
-  width: 100%;
-  height: 140px;
+.test-instructions {
+  padding: 10px;
+  background-color: #9fbaff;
 }

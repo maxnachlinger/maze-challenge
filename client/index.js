@@ -1,7 +1,13 @@
 import "./style.css";
 import "./prism.css";
-import './prism';
-import {drawRectsOnMazeCanvas, getMazeBaseDrawInstructions, getSolutionDrawInstructions, sizeMazeCanvas} from './draw-maze';
+import "./prism";
+import {
+  drawRectsOnMazeCanvas,
+  getMazeBaseDrawInstructions,
+  getSolutionDrawInstructions,
+  sizeMazeCanvas,
+} from "./draw-maze";
+import { testMaze, testMazeSolution } from "./test-maze";
 
 const drawState = ({
   ui: {
@@ -9,11 +15,17 @@ const drawState = ({
     mazeDefinitionTextarea,
     mazeCanvas,
     solutionResultsDiv,
+    solutionTextarea,
   },
   mazeBlockDimensions,
   mazeDefinition,
   solutionTestResult,
+  solution,
 }) => {
+  if (animationHandle) {
+    window.cancelAnimationFrame(animationHandle);
+  }
+
   const mazeDefinitionString = JSON.stringify(mazeDefinition);
 
   downloadMazeLink.style.display = "inline";
@@ -41,6 +53,8 @@ const drawState = ({
     drawInstructions: mazeBaseDrawInstructions,
   });
 
+  solutionTextarea.value = solution;
+
   if (!solutionTestResult) {
     solutionResultsDiv.style.setProperty("display", "none");
     return;
@@ -51,6 +65,9 @@ const drawState = ({
     ? "Your solution works, well done!"
     : "Your solution had some errors: " + solutionTestResult.errorMessage;
 };
+
+// TODO - get this global state out
+let animationHandle;
 
 const animateSolution = ({
   mazeBlockDimensions,
@@ -75,7 +92,7 @@ const animateSolution = ({
       drawInstructions: [instruction],
     });
 
-    window.requestAnimationFrame(drawStep);
+    animationHandle = window.requestAnimationFrame(drawStep);
   };
 
   drawStep();
@@ -90,11 +107,14 @@ const main = ({ generate_maze, check_solution }) => {
     "solutionTextarea",
     "testSolutionButton",
     "solutionResultsDiv",
+    "testMazeLink",
+    "generateMazeLink",
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
   const state = {
-    mazeDefinition: JSON.parse(generate_maze(50, 50)),
+    mazeDefinition: JSON.parse(generate_maze(100, 100)),
     solution: null,
+    solutionTestResult: null,
     mazeBlockDimensions: { width: 10, height: 10 },
     ui,
   };
@@ -107,13 +127,32 @@ const main = ({ generate_maze, check_solution }) => {
   });
 
   ui.testSolutionButton.addEventListener("click", () => {
-    const solution = ui.solutionTextarea.value;
+    state.solution = ui.solutionTextarea.value;
     state.solutionTestResult = JSON.parse(
-      check_solution(JSON.stringify(state.mazeDefinition), solution)
+      check_solution(JSON.stringify(state.mazeDefinition), state.solution)
     );
 
     drawState(state);
     animateSolution(state);
+  });
+
+  ui.testMazeLink.addEventListener("click", () => {
+    state.mazeDefinition = testMaze;
+    state.solution = JSON.stringify(testMazeSolution);
+
+    state.solutionTestResult = JSON.parse(
+      check_solution(JSON.stringify(testMaze), state.solution)
+    );
+
+    drawState(state);
+    animateSolution(state);
+  });
+
+  ui.generateMazeLink.addEventListener("click", () => {
+    state.mazeDefinition = JSON.parse(generate_maze(100, 100));
+    state.solution = null;
+    state.solutionTestResult = null;
+    drawState(state);
   });
 };
 
