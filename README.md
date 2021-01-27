@@ -1,7 +1,9 @@
 ## Maze challenge!
 
 > A fun take-home coding assignment for job applicants
-s
+
+## [Demo](https://maxnachlinger.js.org/maze-challenge/)
+
 ## Install things
 
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
