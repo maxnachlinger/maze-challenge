@@ -35,29 +35,22 @@ pub fn generate_rectangular_maze(num_rows: i32, num_columns: i32) -> PrefectRect
         // try to move in all directions, in random order
         shuffle_directions().iter().for_each(|direction| {
             // try to move in direction
-            let new_position = Position {
-                row: current_position.row + ROW_DIRECTION_OFFSETS[direction],
-                col: current_position.col + COL_DIRECTION_OFFSETS[direction],
-            };
+            let row = current_position.row + ROW_DIRECTION_OFFSETS[direction];
+            let col = current_position.col + COL_DIRECTION_OFFSETS[direction];
 
             // is new position on the maze?
-            if new_position.row < 0
-                || new_position.row >= num_rows
-                || new_position.col < 0
-                || new_position.col >= num_columns
-            {
+            if row < 0 || row >= num_rows || col < 0 || col >= num_columns {
                 return;
             }
 
             // have we visited this position? We don't want loops in the maze so return
             let new_cell = rows_and_columns
-                .get(new_position.row as usize)
+                .get(row as usize)
                 .unwrap()
-                .get(new_position.col as usize)
-                .unwrap()
-                .clone();
+                .get(col as usize)
+                .unwrap();
 
-            if new_cell != CELL_UNEXPLORED {
+            if new_cell != &CELL_UNEXPLORED {
                 return;
             }
 
@@ -69,12 +62,11 @@ pub fn generate_rectangular_maze(num_rows: i32, num_columns: i32) -> PrefectRect
 
             // we entered the new cell from the opposite direction we left the old one.
             // write our entered direction top the new cell.
-            rows_and_columns[new_position.row as usize][new_position.col as usize] |=
-                OPPOSITE_DIRECTIONS[direction];
+            rows_and_columns[row as usize][col as usize] |= OPPOSITE_DIRECTIONS[direction];
 
             // add this new location to the stack so we can come back and explore from
             // here
-            next_moves_stack.push(new_position);
+            next_moves_stack.push(Position { row, col });
         });
     }
 
