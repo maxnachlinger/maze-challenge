@@ -1,9 +1,7 @@
 ## Maze challenge!
 
 > A fun take-home coding assignment for job applicants
-
-## [Demo](https://gecgithub01.walmart.com/pages/m0n0096/maze-challenge/)
-
+s
 ## Install things
 
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
