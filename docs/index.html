@@ -17,7 +17,12 @@
         <pre><code class="language-javascript">{
   "start": {"row": 0, "col": 0}, // starting point in maze
   "end": {"row": 3, "col": 3}, // goal/end point in maze
-   // 2-2 array of maze rows and columns. Read more below :)
+  /*
+    2-d array of maze rows and columns.  The numbers in the
+    cells are bits which tell you which walls of that cell
+    are open. The bits are:
+    UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8
+  */
   "rowsAndColumns": [
     [6, 8, 4, 4],
     [7, 8, 3, 13],
@@ -25,11 +30,6 @@
     [3, 10, 11, 9]
   ]
 }
-/*
-The number in the cell are bits which tell you which walls
-of that cell are open. The bits are:
-UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8
-*/
 </code></pre>
         <p>
           Here is some example code testing a cell to see which exits are
