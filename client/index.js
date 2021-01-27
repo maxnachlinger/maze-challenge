@@ -36,7 +36,7 @@ const drawState = ({
   );
   downloadMazeLink.setAttribute("download", "maze.json");
 
-  mazeDefinitionTextarea.innerText = mazeDefinitionString;
+  mazeDefinitionTextarea.value = mazeDefinitionString;
 
   sizeMazeCanvas({ mazeCanvas, mazeBlockDimensions, mazeDefinition });
 
