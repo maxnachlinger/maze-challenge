@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
-const CopyPlugin = require("copy-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const docs = path.resolve(__dirname, "docs");
 
@@ -22,8 +22,8 @@ module.exports = {
     contentBase: docs,
   },
   plugins: [
-    new CopyPlugin({
-      patterns: [path.resolve(__dirname, "static")],
+    new HtmlWebpackPlugin({
+      template: './client/index.html'
     }),
     new WasmPackPlugin({
       crateDirectory: __dirname,
