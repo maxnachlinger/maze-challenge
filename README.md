@@ -22,7 +22,7 @@ npm start
 
 ## Build for release
 
-Builds the project and places it into the `docs` folder.
+Builds the project and places it into the `docs` folder (which the Github pages demo is built from).
 
 ```sh
 npm run build
@@ -38,9 +38,8 @@ npm test -- --chrome
 ## Code
 
 - Rust code (which is compiled to WASM) is in [./src](./src)
-- Front end HTML is in [./static](./static)
-- Front end JS code is in [./js](client)
-- I added a [some non-fancy solutions here](./solutions)
+- Front end code is in [./client](client)
+- I added a few non-fancy solutions in the solutions branch.
 
 ## Questions and answers
 
