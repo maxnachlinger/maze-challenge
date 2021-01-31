@@ -125,7 +125,19 @@ const main = ({ generate_maze, check_solution }) => {
   drawState(state);
 
   ui.updateMazeButton.addEventListener("click", () => {
-    state.mazeDefinition = JSON.parse(ui.mazeDefinitionTextarea.value);
+    let parsedDefinition = null;
+    try {
+      parsedDefinition = JSON.parse(ui.mazeDefinitionTextarea.value);
+    } catch (error) {
+      state.solutionTestResult = {
+        valid: false,
+        errorMessage: `Invalid JSON submitted in maze definition, please check the format of your definition. ${error.message}`,
+      };
+      drawState(state);
+      return;
+    }
+
+    state.mazeDefinition = parsedDefinition;
     drawState(state);
   });
 
