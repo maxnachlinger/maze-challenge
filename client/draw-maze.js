@@ -3,7 +3,7 @@ const right = 2;
 const down = 4;
 const left = 8;
 
-const wallStrokeWidth = 1;
+const wallStrokeWidth = 0.6;
 
 export const getMazeBaseDrawInstructions = ({
   mazeBlockDimensions: { height, width },

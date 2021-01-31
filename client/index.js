@@ -115,7 +115,7 @@ const main = ({ generate_maze, check_solution }) => {
     mazeDefinition: JSON.parse(generate_maze(100, 100)),
     solution: null,
     solutionTestResult: null,
-    mazeBlockDimensions: { width: 10, height: 10 },
+    mazeBlockDimensions: { width: 6, height: 6 },
     ui,
   };
 
