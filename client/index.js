@@ -56,17 +56,20 @@ const drawState = ({
   solutionTextarea.value = solution;
 
   if (!solutionTestResult) {
-    solutionResultsDiv.style.setProperty("display", "none");
+    solutionResultsDiv.setAttribute("class", "no-solution");
     return;
   }
 
-  solutionResultsDiv.style.setProperty("display", "block");
+  solutionResultsDiv.setAttribute(
+    "class",
+    solutionTestResult.valid ? "solution-valid" : "solution-invalid"
+  );
   solutionResultsDiv.innerText = solutionTestResult.valid
     ? "Your solution works, well done!"
-    : "Your solution had some errors: " + solutionTestResult.errorMessage;
+    : solutionTestResult.errorMessage;
 };
 
-// TODO - get this global state out
+// TODO - egad! get this global state out
 let animationHandle;
 
 const animateSolution = ({
@@ -128,10 +131,21 @@ const main = ({ generate_maze, check_solution }) => {
 
   ui.testSolutionButton.addEventListener("click", () => {
     state.solution = ui.solutionTextarea.value;
+
+    try {
+      JSON.parse(state.solution);
+    } catch (error) {
+      state.solutionTestResult = {
+        valid: false,
+        errorMessage: `Invalid JSON submitted, please check the format of your solution. ${error.message}`,
+      };
+      drawState(state);
+      return;
+    }
+
     state.solutionTestResult = JSON.parse(
       check_solution(JSON.stringify(state.mazeDefinition), state.solution)
     );
-
     drawState(state);
     animateSolution(state);
   });

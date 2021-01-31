@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const docs = path.resolve(__dirname, "docs");
 
@@ -23,7 +23,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/index.html'
+      template: "./client/index.html",
     }),
     new WasmPackPlugin({
       crateDirectory: __dirname,

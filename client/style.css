@@ -24,3 +24,20 @@ textarea {
   padding: 10px;
   background-color: #9fbaff;
 }
+.no-solution {
+  display: none;
+}
+.solution-invalid {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em 0 0.5em 0;
+  border: thin darkred dashed;
+  color: darkred;
+}
+.solution-valid {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em 0 0.5em 0;
+  border: thin green dashed;
+  color: green;
+}
