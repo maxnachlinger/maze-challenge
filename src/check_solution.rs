@@ -107,8 +107,8 @@ pub fn check_rectangular_maze_solution(
                     return result;
                 }
 
-                result.solution.push(position.clone());
-                result.last_position = Some(position.clone());
+                result.solution.push(*position);
+                result.last_position = Some(*position);
                 return result;
             }
 
@@ -172,10 +172,9 @@ pub fn check_rectangular_maze_solution(
                 return result;
             }
 
-            result.solution.push(position.clone());
-            result.last_position = Some(position.clone());
-
-            return result;
+            result.solution.push(*position);
+            result.last_position = Some(*position);
+            result
         },
     );
 

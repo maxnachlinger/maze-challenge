@@ -25,7 +25,7 @@ pub fn generate_rectangular_maze(num_rows: i32, num_columns: i32) -> PrefectRect
     let mut rows_and_columns: Vec<Vec<i8>> =
         vec![vec![CELL_UNEXPLORED; num_columns as usize]; num_rows as usize];
 
-    let mut next_moves_stack: Vec<Position> = vec![start.clone()];
+    let mut next_moves_stack: Vec<Position> = vec![start];
 
     while !next_moves_stack.is_empty() {
         let current_position = next_moves_stack
