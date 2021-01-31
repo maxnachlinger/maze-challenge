@@ -12,6 +12,14 @@ textarea {
 .flex-grid .col {
   width: 48%;
 }
+@media (max-width: 1050px) {
+  .flex-grid {
+    display: block;
+  }
+  .flex-grid .col {
+    width: 100%;
+  }
+}
 .test-instructions {
   padding: 10px;
   background-color: #9fbaff;
