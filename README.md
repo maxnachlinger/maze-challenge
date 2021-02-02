@@ -2,9 +2,25 @@
 
 > A fun take-home coding assignment for job applicants
 
-## [Demo](https://maxnachlinger.js.org/maze-challenge/)
+## [Demo (this is sent to applicants)](https://maxnachlinger.js.org/maze-challenge/)
 
-## Install things
+## Hey why does this use WASM?
+
+I want to generate mazes and test solutions client-side to avoid load on servers.
+Of course by giving away the maze generation and solution checking code,
+you pretty much give away an algorithm for solving the maze :) WASM helps with
+this since solving this silly maze will be simpler than getting anything useful
+out of decompiled WASM :)
+
+## Development
+
+### Code
+
+- Rust code (which is compiled to WASM) is in [./src](./src)
+- Front end code is in [./client](client)
+- I added a few non-fancy solutions in the solutions branch.
+
+### Install
 
 - You need nodejs installed - [here's how to install it](https://nodejs.org/)
 - You also need Rust installed - [here's how to do that](https://www.rust-lang.org/tools/install)
@@ -14,13 +30,13 @@
   npm ci
   ```
 
-## Run in debug mode
+### Run in debug mode
 
 ```sh
 npm start
 ```
 
-## Build for release
+### Build for release
 
 Builds the project and places it into the `docs` folder (which the Github pages demo is built from).
 
@@ -28,28 +44,12 @@ Builds the project and places it into the `docs` folder (which the Github pages 
 npm run build
 ```
 
-## How to run unit tests
+### Unit tests
 
 ```sh
 # Runs tests in Chrome
 npm test -- --chrome
 ```
-
-## Code
-
-- Rust code (which is compiled to WASM) is in [./src](./src)
-- Front end code is in [./client](client)
-- I added a few non-fancy solutions in the solutions branch.
-
-## Questions and answers
-
-### Hey why does this use WASM?
-
-I want to generate mazes and test solutions client-side to avoid load on servers.
-Of course by giving away the maze generation and solution checking code,
-you pretty much give away an algorithm for solving the maze :) WASM helps with
-this since solving this silly maze will be simpler than getting anything useful
-out of decompiled WASM :)
 
 ## TODO
 
