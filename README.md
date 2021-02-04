@@ -18,7 +18,6 @@ out of decompiled WASM :)
 
 - Rust code (which is compiled to WASM) is in [./src](./src)
 - Front end code is in [./client](client)
-- I added a few non-fancy solutions in the solutions branch.
 
 ### Install
 
