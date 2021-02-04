@@ -10,12 +10,15 @@ import {
 import { testMaze, testMazeSolution } from "./test-maze";
 
 const drawState = ({
+  loading,
   ui: {
     downloadMazeLink,
     mazeDefinitionTextarea,
     mazeCanvas,
     solutionResultsDiv,
     solutionTextarea,
+    testSolutionButton,
+    generateMazeLink,
   },
   mazeBlockDimensions,
   mazeDefinition,
@@ -25,6 +28,9 @@ const drawState = ({
   if (animationHandle) {
     window.cancelAnimationFrame(animationHandle);
   }
+
+  testSolutionButton.style.display = loading ? "hidden" : "";
+  generateMazeLink.style.display = loading ? "hidden" : "";
 
   const mazeDefinitionString = JSON.stringify(mazeDefinition);
 
@@ -101,27 +107,9 @@ const animateSolution = ({
   drawStep();
 };
 
-const main = ({ generate_maze, check_solution }) => {
-  const ui = [
-    "downloadMazeLink",
-    "mazeDefinitionTextarea",
-    "updateMazeButton",
-    "mazeCanvas",
-    "solutionTextarea",
-    "testSolutionButton",
-    "solutionResultsDiv",
-    "testMazeLink",
-    "generateMazeLink",
-  ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
-
-  const state = {
-    mazeDefinition: JSON.parse(generate_maze(100, 100)),
-    solution: null,
-    solutionTestResult: null,
-    mazeBlockDimensions: { width: 6, height: 6 },
-    ui,
-  };
-
+const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
+  console.log("WASM loaded");
+  state.loading = false;
   drawState(state);
 
   ui.updateMazeButton.addEventListener("click", () => {
@@ -182,4 +170,33 @@ const main = ({ generate_maze, check_solution }) => {
   });
 };
 
-import("../pkg/index.js").then(main).catch(console.error);
+const startUp = () => {
+  console.log("DOMContentLoaded");
+  const ui = [
+    "downloadMazeLink",
+    "mazeDefinitionTextarea",
+    "updateMazeButton",
+    "mazeCanvas",
+    "solutionTextarea",
+    "testSolutionButton",
+    "solutionResultsDiv",
+    "testMazeLink",
+    "generateMazeLink",
+  ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
+
+  const state = {
+    mazeDefinition: testMaze,
+    solution: null,
+    solutionTestResult: null,
+    mazeBlockDimensions: { width: 6, height: 6 },
+    ui,
+    loading: true,
+  };
+
+  drawState(state);
+  import("../pkg/index.js")
+    .then(wasmLoaded({ ui, state }))
+    .catch(console.error);
+};
+
+document.addEventListener("DOMContentLoaded", startUp);
