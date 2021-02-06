@@ -1,6 +1,7 @@
 const path = require("path");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ESBuildPlugin } = require('esbuild-loader');
 
 const docs = path.resolve(__dirname, "docs");
 
@@ -20,16 +21,17 @@ module.exports = {
     contentBase: docs,
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: "./client/index.html",
-    }),
     new WasmPackPlugin({
       crateDirectory: __dirname,
+    }),
+    new ESBuildPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./client/index.html",
     }),
   ],
   module: {
     rules: [
-      { test: /\.js$/, use: ["babel-loader"] },
+      { test: /\.js$/, use: ["esbuild-loader"] },
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
