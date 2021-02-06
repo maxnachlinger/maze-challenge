@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { ESBuildPlugin } = require('esbuild-loader');
+const { ESBuildPlugin } = require("esbuild-loader");
 
 const docs = path.resolve(__dirname, "docs");
 
