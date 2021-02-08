@@ -108,7 +108,6 @@ const animateSolution = ({
 };
 
 const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
-  console.log("WASM loaded");
   state.loading = false;
   drawState(state);
 
@@ -171,7 +170,6 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
 };
 
 const startUp = () => {
-  console.log("DOMContentLoaded");
   const ui = [
     "downloadMazeLink",
     "mazeDefinitionTextarea",
