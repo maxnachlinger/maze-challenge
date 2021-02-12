@@ -167,6 +167,13 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
     state.solutionTestResult = null;
     drawState(state);
   });
+
+  ui.generateSmallMazeLink.addEventListener("click", () => {
+    state.mazeDefinition = JSON.parse(generate_maze(10, 10));
+    state.solution = null;
+    state.solutionTestResult = null;
+    drawState(state);
+  });
 };
 
 const startUp = () => {
@@ -180,6 +187,7 @@ const startUp = () => {
     "solutionResultsDiv",
     "testMazeLink",
     "generateMazeLink",
+    "generateSmallMazeLink",
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
   const state = {
