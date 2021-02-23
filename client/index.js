@@ -142,34 +142,30 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
       return;
     }
 
-    state.solutionTestResult = JSON.parse(
-      check_solution(JSON.stringify(state.mazeDefinition), state.solution)
-    );
+    state.solutionTestResult = check_solution(state.mazeDefinition, state.solution);
     drawState(state);
     animateSolution(state);
   });
 
   ui.testMazeLink.addEventListener("click", () => {
     state.mazeDefinition = testMaze;
-    state.solution = JSON.stringify(testMazeSolution);
+    state.solution = testMazeSolution;
 
-    state.solutionTestResult = JSON.parse(
-      check_solution(JSON.stringify(testMaze), state.solution)
-    );
+    state.solutionTestResult = check_solution(testMaze, state.solution);
 
     drawState(state);
     animateSolution(state);
   });
 
   ui.generateMazeLink.addEventListener("click", () => {
-    state.mazeDefinition = JSON.parse(generate_maze(100, 100));
+    state.mazeDefinition = generate_maze(100, 100);
     state.solution = null;
     state.solutionTestResult = null;
     drawState(state);
   });
 
   ui.generateSmallMazeLink.addEventListener("click", () => {
-    state.mazeDefinition = JSON.parse(generate_maze(10, 10));
+    state.mazeDefinition = generate_maze(10, 10);
     state.solution = null;
     state.solutionTestResult = null;
     drawState(state);
