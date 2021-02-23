@@ -52,6 +52,5 @@ npm test -- --chrome
 
 ## TODO
 
-- The UI is pretty awful, it should be fixed up but preferably without a ton of bloat/libraries :)
-- The WASM maze-generation is slower than I'd like. The Rust code seems fine, but serializing the resulting maze as a JSON string and deserializing it client-side is not optimal.
+- Serializing between Rust <-> JS seems to be expensive.
 - Add tests
