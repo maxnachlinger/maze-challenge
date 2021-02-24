@@ -59,7 +59,7 @@ const drawState = ({
     drawInstructions: mazeBaseDrawInstructions,
   });
 
-  solutionTextarea.value = JSON.stringify(solution);
+  solutionTextarea.value = solution ? JSON.stringify(solution) : '';
 
   if (!solutionTestResult) {
     solutionResultsDiv.setAttribute("class", "no-solution");
