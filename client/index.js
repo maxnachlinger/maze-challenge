@@ -59,7 +59,7 @@ const drawState = ({
     drawInstructions: mazeBaseDrawInstructions,
   });
 
-  solutionTextarea.value = solution ? JSON.stringify(solution) : '';
+  solutionTextarea.value = solution ? JSON.stringify(solution) : "";
 
   if (!solutionTestResult) {
     solutionResultsDiv.setAttribute("class", "no-solution");
@@ -142,7 +142,10 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
       return;
     }
 
-    state.solutionTestResult = check_solution(state.mazeDefinition, state.solution);
+    state.solutionTestResult = check_solution(
+      state.mazeDefinition,
+      state.solution
+    );
     drawState(state);
     animateSolution(state);
   });

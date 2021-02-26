@@ -1,5 +1,5 @@
-*.rs
-*.toml
+src
 target
 docs
 pkg
+*.toml

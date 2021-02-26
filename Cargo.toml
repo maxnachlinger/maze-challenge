@@ -1,9 +1,8 @@
 [package]
-name = "rust-webpack-template"
-description = "My super awesome Rust, WebAssembly, and Webpack project!"
+name = "maze-challenge"
 version = "0.1.0"
-authors = ["You <you@example.com>"]
-categories = ["wasm"]
+authors = ["Max <max.nachlinger-no-spam@gmail.com>"]
+categories = ["wasm", "maze"]
 readme = "README.md"
 edition = "2018"
 
@@ -14,13 +13,11 @@ crate-type = ["cdylib"]
 lto = true
 
 [dependencies]
-js-sys = "0.3.46"
+js-sys = "0.3.47"
 lazy_static = "1.4.0"
 rand = {version = "0.7", features = ["wasm-bindgen"] }
 serde = { version = "1.0.121", features = ["derive"] }
-serde_json = "1.0.61"
-# The `wasm-bindgen` crate provides the bare minimum functionality needed
-# to interact with JavaScript.
+serde_json = "1.0.63"
 wasm-bindgen = { version = "0.2.69", features = ["serde-serialize"] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
