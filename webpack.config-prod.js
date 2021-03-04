@@ -12,13 +12,9 @@ module.exports = {
   },
   output: {
     path: docs,
-    filename: "[name].js",
   },
   experiments: {
     asyncWebAssembly: true,
-  },
-  devServer: {
-    contentBase: docs,
   },
   plugins: [
     new WasmPackPlugin({

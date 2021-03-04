@@ -14,7 +14,6 @@ module.exports = {
   },
   output: {
     path: docs,
-    filename: "[name].js",
   },
   experiments: {
     asyncWebAssembly: true,
