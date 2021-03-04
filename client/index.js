@@ -131,8 +131,9 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
   ui.testSolutionButton.addEventListener("click", () => {
     state.solution = ui.solutionTextarea.value;
 
+    let solutionInput;
     try {
-      JSON.parse(state.solution);
+      solutionInput = JSON.parse(state.solution);
     } catch (error) {
       state.solutionTestResult = {
         valid: false,
@@ -144,7 +145,7 @@ const wasmLoaded = ({ ui, state }) => ({ generate_maze, check_solution }) => {
 
     state.solutionTestResult = check_solution(
       state.mazeDefinition,
-      state.solution
+      solutionInput,
     );
     drawState(state);
     animateSolution(state);
