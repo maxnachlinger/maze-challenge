@@ -1,0 +1,43 @@
+body {
+  font-family: sans-serif;
+}
+textarea {
+  width: 100%;
+  height: 140px;
+}
+.flex-grid {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-grid .col {
+  width: 48%;
+}
+@media (max-width: 1050px) {
+  .flex-grid {
+    display: block;
+  }
+  .flex-grid .col {
+    width: 100%;
+  }
+}
+.test-instructions {
+  padding: 10px;
+  background-color: #9fbaff;
+}
+.no-solution {
+  display: none;
+}
+.solution-invalid {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em 0 0.5em 0;
+  border: thin darkred dashed;
+  color: darkred;
+}
+.solution-valid {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em 0 0.5em 0;
+  border: thin green dashed;
+  color: green;
+}

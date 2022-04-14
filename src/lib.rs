@@ -292,8 +292,8 @@ impl PrefectRectangularMazeNoLoops {
                 // diagonal move
                 if position_delta > 1 {
                     result.push(format!(
-                        "The position at index ({}) moving from (row: {}, col: {}) to (row: {}, col: {}) was a diagonal move, which is not allowed.",
-                        &idx, &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
+                        "The move from (row: {}, col: {}) to (row: {}, col: {}) was a diagonal move, which is not allowed.",
+                        &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
                     ));
                     valid = false;
                     return result;
@@ -302,8 +302,8 @@ impl PrefectRectangularMazeNoLoops {
                 // no-op
                 if position_delta == 0 {
                     result.push(format!(
-                        "No-move found at index ({}) from (row: {}, col: {}) to (row: {}, col: {}).",
-                        &idx, &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
+                        "No-move found from (row: {}, col: {}) to (row: {}, col: {}).",
+                        &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
                     ));
                     valid = false;
                     return result;
