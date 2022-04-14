@@ -1,1 +1,0 @@
-Draw to the canvas in rust/wasm - steal this from game of life repo :)
