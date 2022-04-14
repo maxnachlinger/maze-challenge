@@ -178,6 +178,7 @@ const startUp = () => {
   ui.testMazeLink.addEventListener("click", () => {
     state.numRows = 100;
     state.numCols = 100;
+    state.drawing.sizeCanvas(state.numCols, state.numRows);
     const { cells, maze } = generateNewMaze(
       state.numRows,
       state.numCols,
@@ -185,6 +186,7 @@ const startUp = () => {
     );
     state.cells = cells;
     state.maze = maze;
+    state.drawing.drawMaze(state.numCols, state.cells);
     state.solution = testMazeSolution;
     state.solutionJSON = JSON.stringify(testMazeSolution, null, 2);
     state.mazeJSON = JSON.stringify(
@@ -208,6 +210,7 @@ const startUp = () => {
   ui.generateMazeLink.addEventListener("click", () => {
     state.numRows = 100;
     state.numCols = 100;
+    state.drawing.sizeCanvas(state.numCols, state.numRows);
     const { cells, maze } = generateNewMaze(state.numRows, state.numCols);
     state.cells = cells;
     state.maze = maze;
@@ -222,6 +225,7 @@ const startUp = () => {
   ui.generateSmallMazeLink.addEventListener("click", () => {
     state.numRows = 10;
     state.numCols = 10;
+    state.drawing.sizeCanvas(state.numCols, state.numRows);
     const { cells, maze } = generateNewMaze(state.numRows, state.numCols);
     state.cells = cells;
     state.maze = maze;
