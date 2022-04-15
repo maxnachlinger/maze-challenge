@@ -17,18 +17,15 @@ const generateNewMaze = (numRows, numCols, cellsInput) => {
   return { maze, cells };
 };
 
-// TODO - egad! get this global state out
-let animationHandle;
-
 const drawState = ({
   mazeJSON,
   solutionJSON,
   solutionTestResult,
   ui: { mazeDefinitionTextarea, solutionResultsDiv, solutionTextarea },
 }) => {
-  if (animationHandle) {
+  if (window.animationHandle) {
     window.cancelAnimationFrame(animationHandle);
-    animationHandle = undefined;
+    window.animationHandle = undefined;
   }
 
   mazeDefinitionTextarea.value = mazeJSON;
@@ -64,10 +61,10 @@ const getUiElements = () =>
     "generateSmallMazeLink",
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
-const animateDrawing = (instructions, instructionsPerTick = 1) => {
-  if (animationHandle) {
+const animateDrawing = ({ instructions, instructionsPerTick = 1 }) => {
+  if (window.animationHandle) {
     window.cancelAnimationFrame(animationHandle);
-    animationHandle = undefined;
+    window.animationHandle = undefined;
   }
 
   const localInstructions = arrayTo2d(instructions, instructionsPerTick);
@@ -80,7 +77,7 @@ const animateDrawing = (instructions, instructionsPerTick = 1) => {
     }
 
     toRun.forEach((fx) => fx());
-    animationHandle = window.requestAnimationFrame(drawStep);
+    window.animationHandle = window.requestAnimationFrame(drawStep);
   };
   drawStep();
 };
@@ -166,7 +163,10 @@ const startUp = () => {
     drawState(state);
 
     if (state.solutionTestResult === "ok") {
-      animateDrawing(state.drawing.getSolutionInstructions(state.solution), 2);
+      animateDrawing({
+        instructions: state.drawing.getSolutionInstructions(state.solution),
+        instructionsPerTick: 2,
+      });
     }
   });
 
@@ -198,7 +198,10 @@ const startUp = () => {
       .forEach((fn) => fn());
 
     if (state.solutionTestResult === "ok") {
-      animateDrawing(state.drawing.getSolutionInstructions(state.solution), 2);
+      animateDrawing({
+        instructions: state.drawing.getSolutionInstructions(state.solution),
+        instructionsPerTick: 2,
+      });
     }
   });
 
