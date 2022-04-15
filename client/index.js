@@ -3,13 +3,22 @@ import { PrefectRectangularMazeNoLoops } from "maze-challenge";
 import "./style.css";
 import "./prism.css";
 import "./prism";
-import {
-  arrayTo2d,
-  transformSolutionForWasm,
-  transformWasmMazeForHumans,
-} from "./transforms";
 import { testMaze, testMazeSolution } from "./test-maze";
 import { setupDrawing } from "./draw-maze";
+
+// human made solution -> something we can send over to wasm
+const transformSolutionForWasm = (solution, numCols) =>
+  new Int32Array(solution.map(({ row, col }) => row * numCols + col));
+
+const arrayTo2d = (arr, perRow) =>
+  arr.reduce((acc, walls, idx) => {
+    const row = Math.floor(idx / perRow);
+    if (!acc[row]) {
+      acc[row] = [];
+    }
+    acc[row].push(walls);
+    return acc;
+  }, []);
 
 const generateNewMaze = (numRows, numCols, cellsInput) => {
   const maze = PrefectRectangularMazeNoLoops.new(numRows, numCols, cellsInput);
@@ -17,15 +26,28 @@ const generateNewMaze = (numRows, numCols, cellsInput) => {
   return { maze, cells };
 };
 
+const ensureNoAnimations = () => {
+  if (!window.animationHandle) {
+    return;
+  }
+  window.cancelAnimationFrame(animationHandle);
+  window.animationHandle = undefined;
+};
+
 const drawState = ({
   mazeJSON,
   solutionJSON,
   solutionTestResult,
+  drawInstructions,
+  animateDrawInstructions,
   ui: { mazeDefinitionTextarea, solutionResultsDiv, solutionTextarea },
 }) => {
-  if (window.animationHandle) {
-    window.cancelAnimationFrame(animationHandle);
-    window.animationHandle = undefined;
+  ensureNoAnimations();
+
+  drawInstructions.forEach((fn) => fn());
+
+  if (animateDrawInstructions) {
+    animateDrawing(animateDrawInstructions);
   }
 
   mazeDefinitionTextarea.value = mazeJSON;
@@ -61,18 +83,15 @@ const getUiElements = () =>
     "generateSmallMazeLink",
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
-const animateDrawing = ({ instructions, instructionsPerTick = 1 }) => {
-  if (window.animationHandle) {
-    window.cancelAnimationFrame(animationHandle);
-    window.animationHandle = undefined;
-  }
+const animateDrawing = ({ instructions, amtInstructionsPerTick = 1 }) => {
+  ensureNoAnimations();
 
-  const localInstructions = arrayTo2d(instructions, instructionsPerTick);
+  const instructionsPerTick = arrayTo2d(instructions, amtInstructionsPerTick);
 
   const drawStep = () => {
-    const toRun = localInstructions.shift();
-
+    const toRun = instructionsPerTick.shift();
     if (!toRun) {
+      ensureNoAnimations();
       return;
     }
 
@@ -84,11 +103,10 @@ const animateDrawing = ({ instructions, instructionsPerTick = 1 }) => {
 
 const startUp = () => {
   const ui = getUiElements();
+  const drawing = setupDrawing(ui.mazeCanvas);
 
   const numRows = 100;
   const numCols = 100;
-
-  const drawing = setupDrawing(ui.mazeCanvas);
 
   drawing.sizeCanvas(numCols, numRows);
 
@@ -105,14 +123,19 @@ const startUp = () => {
     drawing,
     numRows,
     numCols,
+    drawInstructions: [
+      drawing.getClearMazeInstruction(),
+      ...drawing.getWallInstructions(numCols, cells),
+    ],
+    animateDrawInstructions: null,
   };
 
-  state.drawing.getClearMazeInstruction()();
-  state.drawing
-    .getWallInstructions(state.numCols, state.cells)
-    .forEach((fn) => fn());
+  drawState(state);
 
   ui.updateMazeButton.addEventListener("click", () => {
+    state.drawInstructions = [];
+    state.animateDrawInstructions = null;
+
     let json = null;
     try {
       json = JSON.parse(ui.mazeDefinitionTextarea.value);
@@ -135,15 +158,18 @@ const startUp = () => {
     state.numRows = numRows;
     state.numCols = numCols;
     state.mazeJSON = JSON.stringify(json, null, 2);
+    state.drawInstructions = [
+      state.drawing.getClearMazeInstruction(),
+      ...state.drawing.getWallInstructions(state.numCols, state.cells),
+    ];
 
-    state.drawing.getClearMazeInstruction()();
-    state.drawing
-      .getWallInstructions(state.numCols, state.cells)
-      .forEach((fn) => fn());
     drawState(state);
   });
 
   ui.testSolutionButton.addEventListener("click", () => {
+    state.drawInstructions = [];
+    state.animateDrawInstructions = null;
+
     let json;
     try {
       json = JSON.parse(ui.solutionTextarea.value);
@@ -160,14 +186,18 @@ const startUp = () => {
     state.solutionTestResult =
       state.maze.check_solution(solutionForWasm) || "ok";
 
-    drawState(state);
-
     if (state.solutionTestResult === "ok") {
-      animateDrawing({
+      // animateDrawing({
+      //   instructions: state.drawing.getSolutionInstructions(state.solution),
+      //   amtInstructionsPerTick: 2,
+      // });
+      state.animateDrawInstructions = {
         instructions: state.drawing.getSolutionInstructions(state.solution),
-        instructionsPerTick: 2,
-      });
+        amtInstructionsPerTick: 2,
+      };
     }
+
+    drawState(state);
   });
 
   ui.testMazeLink.addEventListener("click", () => {
@@ -184,25 +214,32 @@ const startUp = () => {
     state.solution = testMazeSolution;
     state.solutionJSON = JSON.stringify(testMazeSolution, null, 2);
     state.mazeJSON = null;
+    state.animateDrawInstructions = null;
 
     state.solutionTestResult =
       state.maze.check_solution(
         transformSolutionForWasm(testMazeSolution, state.numCols)
       ) || "ok";
 
+    state.drawInstructions = [
+      state.drawing.getClearMazeInstruction(),
+      ...state.drawing.getWallInstructions(state.numCols, state.cells),
+    ];
+
     drawState(state);
 
-    state.drawing.getClearMazeInstruction()();
-    state.drawing
-      .getWallInstructions(state.numCols, state.cells)
-      .forEach((fn) => fn());
-
     if (state.solutionTestResult === "ok") {
-      animateDrawing({
+      // animateDrawing({
+      //   instructions: state.drawing.getSolutionInstructions(state.solution),
+      //   amtInstructionsPerTick: 2,
+      // });
+      state.animateDrawInstructions = {
         instructions: state.drawing.getSolutionInstructions(state.solution),
-        instructionsPerTick: 2,
-      });
+        amtInstructionsPerTick: 2,
+      };
     }
+
+    drawState(state);
   });
 
   ui.generateMazeLink.addEventListener("click", () => {
@@ -216,11 +253,12 @@ const startUp = () => {
     state.solutionJSON = null;
     state.solutionTestResult = null;
     state.mazeJSON = null;
+    state.drawInstructions = [
+      state.drawing.getClearMazeInstruction(),
+      ...state.drawing.getWallInstructions(state.numCols, state.cells),
+    ];
+    state.animateDrawInstructions = null;
 
-    state.drawing.getClearMazeInstruction()();
-    state.drawing
-      .getWallInstructions(state.numCols, state.cells)
-      .forEach((fn) => fn());
     drawState(state);
   });
 
@@ -235,17 +273,20 @@ const startUp = () => {
     state.solutionJSON = null;
     state.solutionTestResult = null;
     state.mazeJSON = null;
+    state.drawInstructions = [
+      state.drawing.getClearMazeInstruction(),
+      ...state.drawing.getWallInstructions(state.numCols, state.cells),
+    ];
+    state.animateDrawInstructions = null;
 
-    state.drawing.getClearMazeInstruction()();
-    state.drawing
-      .getWallInstructions(state.numCols, state.cells)
-      .forEach((fn) => fn());
     drawState(state);
   });
 
   ui.downloadMazeLink.addEventListener("click", () => {
     const mazeJSON = JSON.stringify(
-      transformWasmMazeForHumans(state.cells, state.numCols),
+      // put the array of cells into a nicer 2d array format
+      // [0,1,2,3] -> [[0,1],[2,3]]
+      arrayTo2d(state.cells, state.numCols),
       null,
       2
     );
