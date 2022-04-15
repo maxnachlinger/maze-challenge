@@ -4,6 +4,7 @@ import "./style.css";
 import "./prism.css";
 import "./prism";
 import {
+  arrayTo2d,
   transformSolutionForWasm,
   transformWasmMazeForHumans,
 } from "./transforms";
@@ -63,20 +64,24 @@ const getUiElements = () =>
     "generateSmallMazeLink",
   ].reduce((acc, id) => ({ ...acc, [id]: document.getElementById(id) }), {});
 
-const animateSolution = ({ drawing, solution }) => {
-  const drawInstructions = drawing.getSolutionDrawInstructions(solution);
+const animateDrawing = (instructions, instructionsPerTick = 1) => {
+  if (animationHandle) {
+    window.cancelAnimationFrame(animationHandle);
+    animationHandle = undefined;
+  }
+
+  const localInstructions = arrayTo2d(instructions, instructionsPerTick);
 
   const drawStep = () => {
-    const instruction = drawInstructions.shift();
-    if (!instruction) {
+    const toRun = localInstructions.shift();
+
+    if (!toRun) {
       return;
     }
 
-    drawing.executeDrawInstructions([instruction]);
-
+    toRun.forEach((fx) => fx());
     animationHandle = window.requestAnimationFrame(drawStep);
   };
-
   drawStep();
 };
 
@@ -105,7 +110,10 @@ const startUp = () => {
     numCols,
   };
 
-  state.drawing.drawMaze(state.numCols, state.cells);
+  state.drawing.getClearMazeInstruction()();
+  state.drawing
+    .getWallInstructions(state.numCols, state.cells)
+    .forEach((fn) => fn());
 
   ui.updateMazeButton.addEventListener("click", () => {
     let json = null;
@@ -131,7 +139,10 @@ const startUp = () => {
     state.numCols = numCols;
     state.mazeJSON = JSON.stringify(json, null, 2);
 
-    state.drawing.drawMaze(state.numCols, state.cells);
+    state.drawing.getClearMazeInstruction()();
+    state.drawing
+      .getWallInstructions(state.numCols, state.cells)
+      .forEach((fn) => fn());
     drawState(state);
   });
 
@@ -155,7 +166,7 @@ const startUp = () => {
     drawState(state);
 
     if (state.solutionTestResult === "ok") {
-      animateSolution(state);
+      animateDrawing(state.drawing.getSolutionInstructions(state.solution), 2);
     }
   });
 
@@ -170,7 +181,6 @@ const startUp = () => {
     );
     state.cells = cells;
     state.maze = maze;
-    state.drawing.drawMaze(state.numCols, state.cells);
     state.solution = testMazeSolution;
     state.solutionJSON = JSON.stringify(testMazeSolution, null, 2);
     state.mazeJSON = null;
@@ -182,8 +192,13 @@ const startUp = () => {
 
     drawState(state);
 
+    state.drawing.getClearMazeInstruction()();
+    state.drawing
+      .getWallInstructions(state.numCols, state.cells)
+      .forEach((fn) => fn());
+
     if (state.solutionTestResult === "ok") {
-      animateSolution(state);
+      animateDrawing(state.drawing.getSolutionInstructions(state.solution), 2);
     }
   });
 
@@ -198,7 +213,11 @@ const startUp = () => {
     state.solutionJSON = null;
     state.solutionTestResult = null;
     state.mazeJSON = null;
-    state.drawing.drawMaze(state.numCols, state.cells);
+
+    state.drawing.getClearMazeInstruction()();
+    state.drawing
+      .getWallInstructions(state.numCols, state.cells)
+      .forEach((fn) => fn());
     drawState(state);
   });
 
@@ -213,7 +232,11 @@ const startUp = () => {
     state.solutionJSON = null;
     state.solutionTestResult = null;
     state.mazeJSON = null;
-    state.drawing.drawMaze(state.numCols, state.cells);
+
+    state.drawing.getClearMazeInstruction()();
+    state.drawing
+      .getWallInstructions(state.numCols, state.cells)
+      .forEach((fn) => fn());
     drawState(state);
   });
 
