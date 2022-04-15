@@ -23,24 +23,12 @@ const drawState = ({
   mazeJSON,
   solutionJSON,
   solutionTestResult,
-  ui: {
-    downloadMazeLink,
-    mazeDefinitionTextarea,
-    solutionResultsDiv,
-    solutionTextarea,
-  },
+  ui: { mazeDefinitionTextarea, solutionResultsDiv, solutionTextarea },
 }) => {
   if (animationHandle) {
     window.cancelAnimationFrame(animationHandle);
     animationHandle = undefined;
   }
-
-  downloadMazeLink.style.display = "inline";
-  downloadMazeLink.setAttribute(
-    "href",
-    "data:application/json;charset=utf-8," + encodeURIComponent(mazeJSON)
-  );
-  downloadMazeLink.setAttribute("download", "maze.json");
 
   mazeDefinitionTextarea.value = mazeJSON;
 
@@ -104,15 +92,9 @@ const startUp = () => {
 
   const { maze, cells } = generateNewMaze(numRows, numCols, testMaze);
 
-  const mazeJSON = JSON.stringify(
-    transformWasmMazeForHumans(testMaze, numCols),
-    null,
-    2
-  );
-
   const state = {
     maze,
-    mazeJSON,
+    mazeJSON: null,
     cells,
     solution: null,
     solutionJSON: "",
@@ -126,24 +108,28 @@ const startUp = () => {
   state.drawing.drawMaze(state.numCols, state.cells);
 
   ui.updateMazeButton.addEventListener("click", () => {
-    let definitionJSON = null;
+    let json = null;
     try {
-      definitionJSON = JSON.parse(ui.mazeDefinitionTextarea.value);
+      json = JSON.parse(ui.mazeDefinitionTextarea.value);
     } catch (error) {
       (state.solutionTestResult = `Invalid JSON submitted in maze definition, please check the format of your definition. ${error.message}`),
         drawState(state);
       return;
     }
 
-    // TODO - calc numCols, numRows for state
+    const numRows = json.length;
+    const numCols = json[0].length;
+
     const { cells, maze } = generateNewMaze(
-      100,
-      100,
-      new Int8Array(definitionJSON)
+      numRows,
+      numCols,
+      new Int8Array(json.flat())
     );
     state.cells = cells;
     state.maze = maze;
-    state.mazeJSON = JSON.stringify(definitionJSON, null, 2);
+    state.numRows = numRows;
+    state.numCols = numCols;
+    state.mazeJSON = JSON.stringify(json, null, 2);
 
     state.drawing.drawMaze(state.numCols, state.cells);
     drawState(state);
@@ -187,11 +173,7 @@ const startUp = () => {
     state.drawing.drawMaze(state.numCols, state.cells);
     state.solution = testMazeSolution;
     state.solutionJSON = JSON.stringify(testMazeSolution, null, 2);
-    state.mazeJSON = JSON.stringify(
-      transformWasmMazeForHumans(testMaze, state.numCols),
-      null,
-      2
-    );
+    state.mazeJSON = null;
 
     state.solutionTestResult =
       state.maze.check_solution(
@@ -235,16 +217,17 @@ const startUp = () => {
     drawState(state);
   });
 
-  // addEventListener("click", () => {
-  //   // new maze
-  //   let start = performance.now();
-  //   state.cells = generateNewMaze();
-  //   console.log("generateNewMaze()", performance.now() - start);
-  //
-  //   start = performance.now();
-  //   drawMaze(state.cells);
-  //   console.log("drawMaze()", performance.now() - start);
-  // });
+  ui.downloadMazeLink.addEventListener("click", () => {
+    const mazeJSON = JSON.stringify(
+      transformWasmMazeForHumans(state.cells, state.numCols),
+      null,
+      2
+    );
+    ui.downloadMazeLink.setAttribute(
+      "href",
+      "data:application/json;charset=utf-8," + encodeURIComponent(mazeJSON)
+    );
+  });
 };
 
 startUp();
