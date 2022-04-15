@@ -28,8 +28,6 @@ const drawState = ({
     mazeDefinitionTextarea,
     solutionResultsDiv,
     solutionTextarea,
-    testSolutionButton,
-    generateMazeLink,
   },
 }) => {
   if (animationHandle) {
