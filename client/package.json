@@ -1,7 +1,6 @@
 {
-  "name": "create-wasm-app",
-  "version": "0.1.0",
-  "description": "create an app to consume rust-generated wasm packages",
+  "name": "maze-challange-client",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
@@ -9,26 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rustwasm/create-wasm-app.git"
+    "url": "git+https://github.com/maxnachlinger/maze-challenge.git"
   },
   "keywords": [
-    "webassembly",
     "wasm",
     "rust",
-    "webpack"
+    "maze"
   ],
-  "author": "Ashley Williams <ashley666ashley@gmail.com>",
+  "author": "Max Nachlinger <maxNOSPAM.nachlingerNOSPAM@gmail.com>",
   "license": "(MIT OR Apache-2.0)",
   "bugs": {
-    "url": "https://github.com/rustwasm/create-wasm-app/issues"
+    "url": "https://github.com/maxnachlinger/maze-challenge/issues"
   },
-  "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
+  "homepage": "https://github.com/maxnachlinger/maze-challenge#readme",
   "devDependencies": {
+    "copy-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^4.5.2",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "copy-webpack-plugin": "^5.0.0"
+    "webpack-dev-server": "^4.8.1"
   },
   "dependencies": {
     "maze-challenge": "file:../pkg"
