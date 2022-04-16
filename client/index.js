@@ -186,6 +186,11 @@ export const startUp = () => {
     state.solutionTestResult =
       state.maze.check_solution(solutionForWasm) || "ok";
 
+    state.drawInstructions = [
+      state.drawing.getClearMazeInstruction(),
+      ...state.drawing.getWallInstructions(state.numCols, state.cells),
+    ];
+
     if (state.solutionTestResult === "ok") {
       state.animateDrawInstructions = {
         instructions: state.drawing.getSolutionInstructions(state.solution),
