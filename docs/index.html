@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="UTF-8"/><title>Maze Challenge</title></head><body><div class="flex-grid"><div class="col"><h2>Maze Challenge</h2><p>Given a maze defined as below, write code which returns the rows and cells visited to solve the maze. You'll start at the first cell and finish at the last one.</p><h3>Maze definition format</h3><pre><code class="language-javascript">/*
+  2-d array of maze rows and columns.  The numbers in the
+  cells are bits which tell you which walls of that cell
+  are open. The bits are:
+  UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8
+*/
+[
+  [6, 8, 4, 4],
+  [7, 8, 3, 13],
+  [7, 8, 4, 5],
+  [3, 10, 11, 9]
+]
+</code></pre><p>Here is some example code testing a cell to see which exits are available:</p><pre><code class="language-javascript">// directions used in the maze / how the bits are defined
+const UP = 1;
+const RIGHT = 2;
+const DOWN = 4;
+const LEFT = 8;
+
+const cell = 3;
+
+// here's how you can check for walls/openings
+console.log((cell &amp; UP) !== 0 ? 'up' : 'wall above');
+console.log((cell &amp; RIGHT) !== 0 ? 'right' : 'wall on right');
+console.log((cell &amp; DOWN) !== 0 ? 'down' : 'wall below');
+console.log((cell &amp; LEFT) !== 0 ? 'left' : 'wall on left');
+</code></pre><h3>Your solution</h3><p>Your code should be able to solve any maze defined as per above. Please include the start and end positions in your solution as well.</p><p>The path though the maze provided by your code should be in the following JSON (whitespace doesn&#39;t matter):</p><pre><code class="language-javascript">[
+  {"x":0, "y": 0},
+  {"x":0, "y": 1},
+  {"x":0, "y": 2},
+  {"x":0, "y": 3},
+  {"x":1, "y": 3},
+  {"x":2, "y": 3},
+  {"x":3, "y": 3}
+]
+</code></pre><p>This is the solution to the maze defined above by the way :)</p><h3>Hints and ideas</h3><ul><li>Aside from the cell values telling you the directions to try, you should also make sure you don&#39;t step off the maze :)</li><li>It will also help to keep track of cells you&#39;ve already visited so you don&#39;t retry paths that didn&#39;t work out.</li><li>There are <a href="https://en.wikipedia.org/wiki/Maze_solving_algorithm">lots of maze solving algorithms</a>, it&#39;s not a bad idea to have a look at a few of them.</li><li>This maze is also a graph (if it helps to think of it that way)</li><li>These Mazes:<ul><li>start on the first cell</li><li>end on the last cell</li><li>have exactly 1 solution</li><li>do not contain any loops</li><li>contain cells with 4 possible walls, no diagonal moves are possible</li></ul></li></ul></div><div class="col"><h2>Maze challenge checker</h2><div><p><a id="testMazeLink" href="javascript:">Test maze and solution</a> &nbsp;|&nbsp; <a id="downloadMazeLink" href="javascript:" download="maze.json">Download current maze</a> &nbsp;|&nbsp; <a id="generateMazeLink" href="javascript:">New maze</a> &nbsp;|&nbsp; <a id="generateSmallMazeLink" href="javascript:">New small maze</a></p><canvas id="mazeCanvas"></canvas></div><p>You can also paste a maze definition to test:</p><div><textarea id="mazeDefinitionTextarea"></textarea></div><div><button id="updateMazeButton">Update maze</button></div><h2>Solution</h2><p>Paste your solution here as a JSON array of position objects,<br/>e.g. <code>[{"x":0,"y":0},{"x": 1, "y":0}]</code></p><textarea id="solutionTextarea"></textarea><div id="solutionResultsDiv" class="no-solution"></div><div><button id="testSolutionButton">Test Solution</button></div></div></div><script src="bootstrap.js"></script></body></html>
