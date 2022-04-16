@@ -3,41 +3,28 @@ use lazy_static::lazy_static;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
+// Using `wee_alloc` for smaller code size
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 pub const UP: i8 = 1;
 pub const RIGHT: i8 = 2;
 pub const DOWN: i8 = 4;
 pub const LEFT: i8 = 8;
 
 lazy_static! {
-    pub static ref X_DIRECTION_OFFSETS: HashMap<i8, i32> = {
-        [(LEFT, -1), (RIGHT, 1), (UP, 0), (DOWN, 0)]
-            .iter()
-            .cloned()
-            .collect()
-    };
-    pub static ref Y_DIRECTION_OFFSETS: HashMap<i8, i32> = {
-        [(LEFT, 0), (RIGHT, 0), (UP, -1), (DOWN, 1)]
-            .iter()
-            .cloned()
-            .collect()
-    };
-    pub static ref OPPOSITE_DIRECTIONS: HashMap<i8, i8> = {
-        [(LEFT, RIGHT), (RIGHT, LEFT), (UP, DOWN), (DOWN, UP)]
-            .iter()
-            .cloned()
-            .collect()
-    };
-    pub static ref DIRECTION_TO_NAME_MAP: HashMap<i8, String> = {
-        [
-            (LEFT, String::from("left")),
-            (RIGHT, String::from("right")),
-            (UP, String::from("up")),
-            (DOWN, String::from("down")),
-        ]
-        .iter()
-        .cloned()
-        .collect()
-    };
+    pub static ref X_DIRECTION_OFFSETS: HashMap<i8, i32> =
+        HashMap::from([(LEFT, -1), (RIGHT, 1), (UP, 0), (DOWN, 0)]);
+    pub static ref Y_DIRECTION_OFFSETS: HashMap<i8, i32> =
+        HashMap::from([(LEFT, 0), (RIGHT, 0), (UP, -1), (DOWN, 1)]);
+    pub static ref OPPOSITE_DIRECTIONS: HashMap<i8, i8> =
+        HashMap::from([(LEFT, RIGHT), (RIGHT, LEFT), (UP, DOWN), (DOWN, UP)]);
+    pub static ref DIRECTION_TO_NAME_MAP: HashMap<i8, String> = HashMap::from([
+        (LEFT, String::from("left")),
+        (RIGHT, String::from("right")),
+        (UP, String::from("up")),
+        (DOWN, String::from("down")),
+    ]);
 }
 
 fn shuffle_directions() -> Vec<i8> {
@@ -76,16 +63,17 @@ fn determine_move_direction(
         };
     }
 
-    if &next_position.x < &last_position.x {
+    return if &next_position.x < &last_position.x {
         return DirectionAndName {
             value: LEFT,
             name: DIRECTION_TO_NAME_MAP.get(&LEFT).unwrap().clone(),
         };
-    }
-    DirectionAndName {
-        value: RIGHT,
-        name: DIRECTION_TO_NAME_MAP.get(&RIGHT).unwrap().clone(),
-    }
+    } else {
+        DirectionAndName {
+            value: RIGHT,
+            name: DIRECTION_TO_NAME_MAP.get(&RIGHT).unwrap().clone(),
+        }
+    };
 }
 
 fn get_cell_wall_names(state: &i8) -> String {
@@ -308,7 +296,7 @@ impl PrefectRectangularMazeNoLoops {
                 if (last_cell & position_direction.value) == 0 {
                     let cell_walls = get_cell_wall_names(&last_cell);
                     result.push(format!(
-                        "The  move from {} from ({}, {}) to ({}, {}) hit a wall. Cell at: ({}, {}) has walls: ({})",
+                        "The move {} from ({}, {}) to ({}, {}) hit a wall. Cell at: ({}, {}) has walls: ({})",
                         position_direction.name, &last_position_safe.x, &last_position_safe.y, &current_position.x, &current_position.y, &last_position_safe.x, &last_position_safe.y, &cell_walls,
                     ));
                     valid = false;
