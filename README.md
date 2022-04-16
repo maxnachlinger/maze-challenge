@@ -16,8 +16,8 @@ out of decompiled WASM :)
 
 ### Code
 
-- Rust code (which is compiled to WASM) is in [./src](./src)
-- Front end code is in [./client](client-old)
+- Rust code (which is compiled to WASM) is in [./src/lib.rs](./src/lib.rs)
+- Front end code is in [./client](client)
 
 ### Install
 
@@ -29,28 +29,20 @@ out of decompiled WASM :)
   npm ci
   ```
 
-### Run in debug mode
+### Build WASM
 
 ```sh
-npm start
+wasm-pack build
 ```
 
-### Build for release
-
-Builds the project and places it into the `docs` folder (which the Github pages demo is built from).
+### Start client for dev work
 
 ```sh
-npm run build
+cd client; npm start
 ```
 
-### Unit tests
+### Build client for release
 
 ```sh
-# Runs tests in Chrome
-npm test -- --chrome
+cd client; npm run build
 ```
-
-## TODO
-
-- Serializing between Rust <-> JS seems to be expensive.
-- Add tests
