@@ -1,9 +1,7 @@
 use js_sys::Math::*;
-use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::*;
-extern crate serde;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
+use wasm_bindgen::prelude::*;
 
 pub const UP: i8 = 1;
 pub const RIGHT: i8 = 2;
@@ -11,13 +9,13 @@ pub const DOWN: i8 = 4;
 pub const LEFT: i8 = 8;
 
 lazy_static! {
-    pub static ref COL_DIRECTION_OFFSETS: HashMap<i8, i32> = {
+    pub static ref X_DIRECTION_OFFSETS: HashMap<i8, i32> = {
         [(LEFT, -1), (RIGHT, 1), (UP, 0), (DOWN, 0)]
             .iter()
             .cloned()
             .collect()
     };
-    pub static ref ROW_DIRECTION_OFFSETS: HashMap<i8, i32> = {
+    pub static ref Y_DIRECTION_OFFSETS: HashMap<i8, i32> = {
         [(LEFT, 0), (RIGHT, 0), (UP, -1), (DOWN, 1)]
             .iter()
             .cloned()
@@ -64,8 +62,8 @@ fn determine_move_direction(
     last_position: &Position,
     next_position: &Position,
 ) -> DirectionAndName {
-    if &last_position.row != &next_position.row {
-        return if &next_position.row < &last_position.row {
+    if &last_position.y != &next_position.y {
+        return if &next_position.y < &last_position.y {
             DirectionAndName {
                 value: UP,
                 name: DIRECTION_TO_NAME_MAP.get(&UP).unwrap().clone(),
@@ -78,7 +76,7 @@ fn determine_move_direction(
         };
     }
 
-    if &next_position.col < &last_position.col {
+    if &next_position.x < &last_position.x {
         return DirectionAndName {
             value: LEFT,
             name: DIRECTION_TO_NAME_MAP.get(&LEFT).unwrap().clone(),
@@ -116,10 +114,10 @@ The cell B to the right of A would also lack a left wall :) So (B & LEFT) != 0
 const CELL_UNEXPLORED: i8 = 0;
 
 #[wasm_bindgen]
-#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Position {
-    pub row: i32,
-    pub col: i32,
+    pub x: i32,
+    pub y: i32,
 }
 
 #[wasm_bindgen]
@@ -137,22 +135,15 @@ pub struct PrefectRectangularMazeNoLoops {
     cells: Vec<i8>,
 }
 
-/*
-const cellIdxToRowCol = (idx) => {
-  const row = idx < numCols ? 0 : Math.floor(idx / numCols);
-  const col = idx - (row * numCols);
-  return { row, col };
-}
- */
 impl PrefectRectangularMazeNoLoops {
     fn cell_idx_to_position(&self, idx: &i32) -> Position {
-        let row = if idx < &self.num_columns {
+        let y = if idx < &self.num_columns {
             0
         } else {
             (*idx as f32 / self.num_columns as f32).floor() as i32
         };
-        let col = idx - (row * self.num_columns);
-        Position { row, col }
+        let x = idx - (y * self.num_columns);
+        Position { y, x }
     }
 }
 
@@ -167,10 +158,10 @@ impl PrefectRectangularMazeNoLoops {
         num_columns: i32,
         cells: Option<Vec<i8>>,
     ) -> PrefectRectangularMazeNoLoops {
-        let start = Position { row: 0, col: 0 };
+        let start = Position { x: 0, y: 0 };
         let end = Position {
-            row: num_rows - 1,
-            col: num_columns - 1,
+            x: num_columns - 1,
+            y: num_rows - 1,
         };
 
         if cells.is_some() {
@@ -195,19 +186,19 @@ impl PrefectRectangularMazeNoLoops {
             // try to move in all directions, in random order
             shuffle_directions().iter().for_each(|direction| {
                 // try to move in direction
-                let row = current_position.row + ROW_DIRECTION_OFFSETS[direction];
-                let col = current_position.col + COL_DIRECTION_OFFSETS[direction];
+                let x = current_position.x + X_DIRECTION_OFFSETS[direction];
+                let y = current_position.y + Y_DIRECTION_OFFSETS[direction];
 
                 // is new position on the maze?
-                if row < 0 || row >= num_rows || col < 0 || col >= num_columns {
+                if y < 0 || y >= num_rows || x < 0 || x >= num_columns {
                     return;
                 }
 
                 // have we visited this position? We don't want loops in the maze so return
                 let new_cell = rows_columns_state
-                    .get(row as usize)
+                    .get(y as usize)
                     .unwrap()
-                    .get(col as usize)
+                    .get(x as usize)
                     .unwrap();
 
                 if new_cell != &CELL_UNEXPLORED {
@@ -217,16 +208,16 @@ impl PrefectRectangularMazeNoLoops {
                 // explore the cell!
 
                 // write the direction we exited from in to our old cell
-                rows_columns_state[current_position.row as usize][current_position.col as usize] |=
+                rows_columns_state[current_position.y as usize][current_position.x as usize] |=
                     direction;
 
                 // we entered the new cell from the opposite direction we left the old one.
                 // write our entered direction to the new cell.
-                rows_columns_state[row as usize][col as usize] |= OPPOSITE_DIRECTIONS[direction];
+                rows_columns_state[y as usize][x as usize] |= OPPOSITE_DIRECTIONS[direction];
 
                 // add this new location to the stack so we can come back and explore from
                 // here
-                next_moves_stack.push(Position { row, col });
+                next_moves_stack.push(Position { x, y });
             });
         }
 
@@ -265,10 +256,10 @@ impl PrefectRectangularMazeNoLoops {
                 // no last position means we're starting, ensure we're starting at maze.start
                 if last_position.is_none() {
                     // is this position on the maze?
-                    if current_position.row != self.start.row || current_position.col != self.start.col {
+                    if current_position.x != self.start.x || current_position.y != self.start.y {
                         result.push(format!(
-                            "Start your solution at the starting cell (row: {}, col: {}).",
-                            &self.start.row, &self.start.col,
+                            "Start your solution at the starting cell ({}, {}).",
+                            &self.start.x, &self.start.y,
                         ));
                         valid = false;
                         return result;
@@ -286,14 +277,14 @@ impl PrefectRectangularMazeNoLoops {
                 //   are, ignore the move. If we are not, error with no-move.
 
                 let last_position_safe = last_position.unwrap();
-                let position_delta = (last_position_safe.row.abs() - current_position.row.abs()).abs()
-                    + (last_position_safe.col.abs() - current_position.col.abs()).abs();
+                let position_delta = (last_position_safe.y.abs() - current_position.y.abs()).abs()
+                    + (last_position_safe.x.abs() - current_position.x.abs()).abs();
 
                 // diagonal move
                 if position_delta > 1 {
                     result.push(format!(
-                        "The move from (row: {}, col: {}) to (row: {}, col: {}) was a diagonal move, which is not allowed.",
-                        &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
+                        "The move from ({}, {}) to ({}, {}) was a diagonal move, which is not allowed.",
+                        &last_position_safe.x, &last_position_safe.y, &current_position.x, &current_position.y,
                     ));
                     valid = false;
                     return result;
@@ -302,8 +293,8 @@ impl PrefectRectangularMazeNoLoops {
                 // no-op
                 if position_delta == 0 {
                     result.push(format!(
-                        "No-move found from (row: {}, col: {}) to (row: {}, col: {}).",
-                        &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col,
+                        "No-move found from ({}, {}) to ({}, {}).",
+                        &last_position_safe.x, &last_position_safe.y, &current_position.x, &current_position.y,
                     ));
                     valid = false;
                     return result;
@@ -317,8 +308,8 @@ impl PrefectRectangularMazeNoLoops {
                 if (last_cell & position_direction.value) == 0 {
                     let cell_walls = get_cell_wall_names(&last_cell);
                     result.push(format!(
-                        "The position at index ({}) moving ({}) from (row: {}, col: {}) to (row: {}, col: {}) hit a wall. Cell at: (row: {}, col: {}) has walls: ({})",
-                        &idx, position_direction.name, &last_position_safe.row, &last_position_safe.col, &current_position.row, &current_position.col, &last_position_safe.row, &last_position_safe.col, &cell_walls,
+                        "The  move from {} from ({}, {}) to ({}, {}) hit a wall. Cell at: ({}, {}) has walls: ({})",
+                        position_direction.name, &last_position_safe.x, &last_position_safe.y, &current_position.x, &current_position.y, &last_position_safe.x, &last_position_safe.y, &cell_walls,
                     ));
                     valid = false;
                     return result;
@@ -335,11 +326,11 @@ impl PrefectRectangularMazeNoLoops {
         }
 
         // check that the last cell of the solution is maze.end
-        let Position { row, col } = last_position.unwrap();
-        if row != self.end.row || col != self.end.col {
+        let Position { y, x } = last_position.unwrap();
+        if y != self.end.y || x != self.end.x {
             check_solution_result.push(format!(
-                "Complete your solution at the ending cell (row: {}, col: {}).",
-                &self.end.row, &self.end.col,
+                "Complete your solution at the ending cell ({}, {}).",
+                &self.end.x, &self.end.y,
             ));
             return Some(check_solution_result.join("\n"));
         }

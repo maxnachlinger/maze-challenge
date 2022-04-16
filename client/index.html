@@ -57,13 +57,13 @@ console.log((cell &amp; LEFT) !== 0 ? 'left' : 'wall on left');
           following JSON (whitespace doesn&#39;t matter):
         </p>
         <pre><code class="language-javascript">[
-  {"row":0, "col":0},
-  {"row":1, "col":0},
-  {"row":2, "col":0},
-  {"row":3, "col":0},
-  {"row":3, "col":1},
-  {"row":3, "col":2},
-  {"row":3, "col":3}
+  {"x":0, "y": 0},
+  {"x":0, "y": 1},
+  {"x":0, "y": 2},
+  {"x":0, "y": 3},
+  {"x":1, "y": 3},
+  {"x":2, "y": 3},
+  {"x":3, "y": 3}
 ]
 </code></pre>
         <p>This is the solution to the maze defined above by the way :)</p>
@@ -131,7 +131,7 @@ console.log((cell &amp; LEFT) !== 0 ? 'left' : 'wall on left');
         <h2>Solution</h2>
         <p>
           Paste your solution here as a JSON array of position objects,<br />e.g.
-          <code>[{"row":0,"col":0},{"row":0,"col":1}]</code>
+          <code>[{"x":0,"y":0},{"x": 1, "y":0}]</code>
         </p>
         <textarea id="solutionTextarea"></textarea>
         <div id="solutionResultsDiv" class="no-solution"></div>

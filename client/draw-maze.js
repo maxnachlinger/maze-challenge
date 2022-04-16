@@ -87,11 +87,14 @@ const getClearMazeInstruction = (mazeCanvas, mazeCanvasContext) => () => () =>
   mazeCanvasContext.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
 
 const getSolutionInstructions = (ctx) => (solution) =>
-  solution.map(({ row, col }) => () => {
-    const x = col * mazeStyle.blocks.width;
-    const y = row * mazeStyle.blocks.height;
+  solution.map(({ x, y }) => () => {
     ctx.fillStyle = mazeStyle.solution.fillStyle;
-    ctx.fillRect(x, y, mazeStyle.blocks.width, mazeStyle.blocks.height);
+    ctx.fillRect(
+      x * mazeStyle.blocks.width,
+      y * mazeStyle.blocks.height,
+      mazeStyle.blocks.width,
+      mazeStyle.blocks.height
+    );
   });
 
 const sizeCanvas = (mazeCanvas) => (numCols, numRows) => {
