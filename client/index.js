@@ -101,9 +101,9 @@ const animateDrawing = ({ instructions, amtInstructionsPerTick = 1 }) => {
   drawStep();
 };
 
-const startUp = () => {
+export const startUp = () => {
   const ui = getUiElements();
-  const drawing = setupDrawing(ui.mazeCanvas);
+  const drawing = setupDrawing(ui);
 
   const numRows = 100;
   const numCols = 100;
@@ -194,6 +194,8 @@ const startUp = () => {
     }
 
     drawState(state);
+    state.drawInstructions = [];
+    state.animateDrawInstructions = null;
   });
 
   ui.testMazeLink.addEventListener("click", () => {
@@ -222,8 +224,6 @@ const startUp = () => {
       ...state.drawing.getWallInstructions(state.numCols, state.cells),
     ];
 
-    drawState(state);
-
     if (state.solutionTestResult === "ok") {
       state.animateDrawInstructions = {
         instructions: state.drawing.getSolutionInstructions(state.solution),
@@ -232,6 +232,8 @@ const startUp = () => {
     }
 
     drawState(state);
+    state.drawInstructions = [];
+    state.animateDrawInstructions = null;
   });
 
   ui.generateMazeLink.addEventListener("click", () => {
@@ -252,6 +254,7 @@ const startUp = () => {
     state.animateDrawInstructions = null;
 
     drawState(state);
+    state.drawInstructions = [];
   });
 
   ui.generateSmallMazeLink.addEventListener("click", () => {
@@ -272,6 +275,7 @@ const startUp = () => {
     state.animateDrawInstructions = null;
 
     drawState(state);
+    state.drawInstructions = [];
   });
 
   ui.downloadMazeLink.addEventListener("click", () => {
@@ -288,5 +292,3 @@ const startUp = () => {
     );
   });
 };
-
-startUp();

@@ -102,8 +102,8 @@ const sizeCanvas = (mazeCanvas) => (numCols, numRows) => {
   mazeCanvas.height = mazeStyle.blocks.height * numRows;
 };
 
-export const setupDrawing = (mazeCanvas) => {
-  const mazeCanvasContext = mazeCanvas.getContext("2d");
+export const setupDrawing = ({ mazeCanvas }) => {
+  const mazeCanvasContext = mazeCanvas.getContext("2d", { alpha: false });
   return {
     sizeCanvas: sizeCanvas(mazeCanvas),
     getClearMazeInstruction: getClearMazeInstruction(
