@@ -1,7 +1,7 @@
 use js_sys::Math::*;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
-use wasm_bindgen::prelude::*;
+use wasm_bindgen::prelude::wasm_bindgen;
 
 // Using `wee_alloc` for smaller code size
 #[global_allocator]
@@ -308,6 +308,8 @@ impl PrefectRectangularMazeNoLoops {
                 result
             },
         );
+
+        std::mem::forget(solution);
 
         if !valid {
             return Some(check_solution_result.join("\n"));
