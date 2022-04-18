@@ -26,7 +26,7 @@ out of decompiled WASM :)
 - Install `wasm-pack` - [here's a link to that](https://rustwasm.github.io/wasm-pack/installer/)
 - Once you have the above, clone this repo and:
   ```sh
-  npm ci
+  cd client; npm ci
   ```
 
 ### Build WASM
