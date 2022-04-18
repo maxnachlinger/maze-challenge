@@ -309,8 +309,6 @@ impl PrefectRectangularMazeNoLoops {
             },
         );
 
-        std::mem::forget(solution);
-
         if !valid {
             return Some(check_solution_result.join("\n"));
         }
