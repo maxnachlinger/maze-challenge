@@ -8,7 +8,7 @@
 
 I want to generate mazes and test solutions client-side to avoid load on servers.
 Of course by giving away the maze generation and solution checking code,
-you pretty much give away an algorithm for solving the maze :) WASM helps with
+you pretty much give away an algorithm for solving the maze. WASM helps with
 this since solving this silly maze will be simpler than getting anything useful
 out of decompiled WASM :)
 
